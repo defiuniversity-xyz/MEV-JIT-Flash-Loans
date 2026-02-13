@@ -3,10 +3,9 @@ import { motion } from 'framer-motion';
 import { Zap, Menu, X } from 'lucide-react';
 import { SECTIONS } from '../../data/constants';
 
-export default function Navbar() {
+export default function Navbar({ visitedSections, onSectionVisible }) {
   const [scrollProgress, setScrollProgress] = useState(0);
   const [activeSection, setActiveSection] = useState('hero');
-  const [visitedSections, setVisitedSections] = useState(new Set(['hero']));
   const [mobileOpen, setMobileOpen] = useState(false);
 
   useEffect(() => {
@@ -15,7 +14,6 @@ export default function Navbar() {
       const progress = totalHeight > 0 ? window.scrollY / totalHeight : 0;
       setScrollProgress(progress);
 
-      // Determine active section
       const sections = SECTIONS.map((s) => ({
         id: s.id,
         el: document.getElementById(s.id),
@@ -25,7 +23,7 @@ export default function Navbar() {
         const rect = sections[i].el.getBoundingClientRect();
         if (rect.top <= 120) {
           setActiveSection(sections[i].id);
-          setVisitedSections((prev) => new Set([...prev, sections[i].id]));
+          onSectionVisible(sections[i].id);
           break;
         }
       }
@@ -33,7 +31,7 @@ export default function Navbar() {
 
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  }, [onSectionVisible]);
 
   const scrollTo = (id) => {
     const el = document.getElementById(id);
@@ -45,14 +43,12 @@ export default function Navbar() {
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 glass" aria-label="Main navigation">
-      {/* Progress bar */}
       <div className="absolute bottom-0 left-0 h-[2px] bg-defi-blue transition-all duration-150"
         style={{ width: `${scrollProgress * 100}%` }}
       />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
         <div className="flex items-center justify-between h-14">
-          {/* Logo + progress */}
           <div className="flex items-center gap-3">
             <button onClick={() => scrollTo('hero')} className="flex items-center gap-2 text-white font-bold text-lg">
               <Zap className="w-5 h-5 text-defi-blue" />
@@ -66,7 +62,6 @@ export default function Navbar() {
             )}
           </div>
 
-          {/* Desktop nav */}
           <div className="hidden lg:flex items-center gap-1">
             {SECTIONS.slice(1).map((section) => {
               const visited = visitedSections.has(section.id);
@@ -91,7 +86,6 @@ export default function Navbar() {
             })}
           </div>
 
-          {/* Mobile toggle */}
           <button
             className="lg:hidden text-defi-muted hover:text-white p-2"
             onClick={() => setMobileOpen(!mobileOpen)}
@@ -103,7 +97,6 @@ export default function Navbar() {
         </div>
       </div>
 
-      {/* Mobile menu */}
       {mobileOpen && (
         <motion.div
           initial={{ opacity: 0, y: -10 }}

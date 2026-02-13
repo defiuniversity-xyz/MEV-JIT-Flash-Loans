@@ -3,8 +3,10 @@ import Navbar from './components/layout/Navbar';
 import Footer from './components/layout/Footer';
 import BackToTop from './components/layout/BackToTop';
 import HeroSection from './components/sections/HeroSection';
+import CourseSyllabus from './components/sections/CourseSyllabus';
 import AtomicitySection from './components/sections/AtomicitySection';
 import FlashLoanMechanics from './components/sections/FlashLoanMechanics';
+import { useProgress } from './hooks/useProgress';
 
 // Lazy load heavier sections that are below the fold
 const FlashLoanUseCases = lazy(() => import('./components/sections/FlashLoanUseCases'));
@@ -32,11 +34,15 @@ function Divider() {
 }
 
 export default function App() {
+  const [visitedSections, markVisited] = useProgress();
+
   return (
     <div className="min-h-screen bg-defi-navy text-defi-text overflow-x-hidden">
-      <Navbar />
+      <Navbar visitedSections={visitedSections} onSectionVisible={markVisited} />
       <main>
         <HeroSection />
+        <Divider />
+        <CourseSyllabus visitedSections={visitedSections} />
         <Divider />
         <AtomicitySection />
         <Divider />
