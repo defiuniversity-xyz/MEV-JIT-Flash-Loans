@@ -1,0 +1,112 @@
+import { useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
+import { Zap, Menu, X } from 'lucide-react';
+import { SECTIONS } from '../../data/constants';
+
+export default function Navbar() {
+  const [scrollProgress, setScrollProgress] = useState(0);
+  const [activeSection, setActiveSection] = useState('hero');
+  const [mobileOpen, setMobileOpen] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const progress = totalHeight > 0 ? window.scrollY / totalHeight : 0;
+      setScrollProgress(progress);
+
+      // Determine active section
+      const sections = SECTIONS.map((s) => ({
+        id: s.id,
+        el: document.getElementById(s.id),
+      })).filter((s) => s.el);
+
+      for (let i = sections.length - 1; i >= 0; i--) {
+        const rect = sections[i].el.getBoundingClientRect();
+        if (rect.top <= 120) {
+          setActiveSection(sections[i].id);
+          break;
+        }
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  const scrollTo = (id) => {
+    const el = document.getElementById(id);
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth' });
+      setMobileOpen(false);
+    }
+  };
+
+  return (
+    <nav className="fixed top-0 left-0 right-0 z-50 glass">
+      {/* Progress bar */}
+      <div className="absolute bottom-0 left-0 h-[2px] bg-defi-blue transition-all duration-150"
+        style={{ width: `${scrollProgress * 100}%` }}
+      />
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6">
+        <div className="flex items-center justify-between h-14">
+          {/* Logo */}
+          <button onClick={() => scrollTo('hero')} className="flex items-center gap-2 text-white font-bold text-lg">
+            <Zap className="w-5 h-5 text-defi-blue" />
+            <span className="hidden sm:inline">DeFi Academy</span>
+          </button>
+
+          {/* Desktop nav */}
+          <div className="hidden lg:flex items-center gap-1">
+            {SECTIONS.slice(1).map((section) => (
+              <button
+                key={section.id}
+                onClick={() => scrollTo(section.id)}
+                className={`px-2.5 py-1.5 rounded-md text-xs font-medium transition-colors ${
+                  activeSection === section.id
+                    ? 'text-defi-blue bg-defi-blue/10'
+                    : 'text-defi-muted hover:text-defi-text hover:bg-white/5'
+                }`}
+              >
+                {section.label}
+              </button>
+            ))}
+          </div>
+
+          {/* Mobile toggle */}
+          <button
+            className="lg:hidden text-defi-muted hover:text-white p-2"
+            onClick={() => setMobileOpen(!mobileOpen)}
+          >
+            {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+          </button>
+        </div>
+      </div>
+
+      {/* Mobile menu */}
+      {mobileOpen && (
+        <motion.div
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="lg:hidden glass border-t border-defi-border"
+        >
+          <div className="px-4 py-3 grid grid-cols-2 gap-1">
+            {SECTIONS.map((section) => (
+              <button
+                key={section.id}
+                onClick={() => scrollTo(section.id)}
+                className={`px-3 py-2 rounded-md text-sm text-left ${
+                  activeSection === section.id
+                    ? 'text-defi-blue bg-defi-blue/10'
+                    : 'text-defi-muted hover:text-white'
+                }`}
+              >
+                {section.label}
+              </button>
+            ))}
+          </div>
+        </motion.div>
+      )}
+    </nav>
+  );
+}
