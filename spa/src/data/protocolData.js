@@ -42,7 +42,7 @@ export const protocols = [
     fee: '0%',
     liquiditySource: 'Global Vault',
     primaryUse: 'High-frequency Arbitrage',
-    color: '#1E1E1E',
+    color: '#7B8AB8',
     description:
       'Balancer aggressively targets arbitrageurs with zero-fee flash loans. V2 uses a single Vault contract holding all assets for every pool, creating billions in accessible liquidity via one call. V3 (2026) optimizes with Transient Storage (EIP-1153), reducing gas costs by wiping debt accounting slots at transaction end.',
     keyFeatures: [

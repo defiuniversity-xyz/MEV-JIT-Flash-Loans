@@ -1,5 +1,6 @@
 import SectionWrapper from '../layout/SectionWrapper';
 import AtomicityVisualizer from '../interactive/AtomicityVisualizer';
+import Tooltip from '../layout/Tooltip';
 import { Atom } from 'lucide-react';
 
 export default function AtomicitySection() {
@@ -13,7 +14,9 @@ export default function AtomicitySection() {
           The Principle of Atomicity
         </h2>
         <p className="text-defi-muted max-w-2xl mx-auto">
-          Flash loans are only possible because of the EVM&apos;s atomic execution model.
+          Flash loans are only possible because of the{' '}
+          <Tooltip term="EVM" definition="Ethereum Virtual Machine — the computation engine that executes smart contract code on Ethereum and compatible blockchains.">EVM</Tooltip>&apos;s
+          atomic execution model.
           A transaction either <span className="text-white font-medium">fully succeeds</span> or{' '}
           <span className="text-white font-medium">fully reverts</span> — there is no intermediate state.
         </p>

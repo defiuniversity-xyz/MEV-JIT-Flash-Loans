@@ -1,6 +1,7 @@
 import { lazy, Suspense } from 'react';
 import Navbar from './components/layout/Navbar';
 import Footer from './components/layout/Footer';
+import BackToTop from './components/layout/BackToTop';
 import HeroSection from './components/sections/HeroSection';
 import AtomicitySection from './components/sections/AtomicitySection';
 import FlashLoanMechanics from './components/sections/FlashLoanMechanics';
@@ -25,46 +26,63 @@ function SectionFallback() {
   );
 }
 
+function Divider() {
+  return <div className="section-divider max-w-4xl mx-auto" />;
+}
+
 export default function App() {
   return (
     <div className="min-h-screen bg-defi-navy text-defi-text overflow-x-hidden">
       <Navbar />
       <main>
         <HeroSection />
+        <Divider />
         <AtomicitySection />
+        <Divider />
         <FlashLoanMechanics />
+        <Divider />
         <Suspense fallback={<SectionFallback />}>
           <FlashLoanUseCases />
         </Suspense>
+        <Divider />
         <Suspense fallback={<SectionFallback />}>
           <FlashLoanAttacks />
         </Suspense>
+        <Divider />
         <Suspense fallback={<SectionFallback />}>
           <ProtocolLandscape />
         </Suspense>
+        <Divider />
         <Suspense fallback={<SectionFallback />}>
           <MEVFundamentals />
         </Suspense>
+        <Divider />
         <Suspense fallback={<SectionFallback />}>
           <AMMEvolution />
         </Suspense>
+        <Divider />
         <Suspense fallback={<SectionFallback />}>
           <JITDeepDive />
         </Suspense>
+        <Divider />
         <Suspense fallback={<SectionFallback />}>
           <JITParadox />
         </Suspense>
+        <Divider />
         <Suspense fallback={<SectionFallback />}>
           <RealWorldStrategies />
         </Suspense>
+        <Divider />
         <Suspense fallback={<SectionFallback />}>
           <FutureOutlook />
         </Suspense>
+        <Divider />
         <Suspense fallback={<SectionFallback />}>
           <SecurityPractices />
         </Suspense>
       </main>
       <Footer />
+      <BackToTop />
     </div>
   );
 }

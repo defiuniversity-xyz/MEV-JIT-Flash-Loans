@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
 import SectionWrapper from '../layout/SectionWrapper';
 import MEVSupplyChainFlow from '../interactive/MEVSupplyChainFlow';
+import Tooltip from '../layout/Tooltip';
 import { mevStrategies } from '../../data/mevJitContent';
 import { Eye } from 'lucide-react';
 
@@ -16,8 +17,9 @@ export default function MEVFundamentals() {
         </h2>
         <p className="text-defi-muted max-w-2xl mx-auto">
           MEV is the profit extracted from block production by including, excluding, or
-          reordering transactions. It&apos;s powered by the transparency of the blockchain
-          mempool where pending transactions are visible to all.
+          reordering transactions. It&apos;s powered by the transparency of the blockchain{' '}
+          <Tooltip term="Mempool" definition="The memory pool — a waiting area where unconfirmed transactions sit before being included in a block. Visible to all network participants, making it a hunting ground for MEV searchers.">mempool</Tooltip>{' '}
+          where pending transactions are visible to all.
         </p>
       </div>
 

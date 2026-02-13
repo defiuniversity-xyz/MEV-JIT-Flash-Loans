@@ -1,5 +1,6 @@
 import SectionWrapper from '../layout/SectionWrapper';
 import JITParadoxDemo from '../interactive/JITParadoxDemo';
+import Tooltip from '../layout/Tooltip';
 import { Scale } from 'lucide-react';
 
 export default function JITParadox() {
@@ -14,7 +15,8 @@ export default function JITParadox() {
         </h2>
         <p className="text-defi-muted max-w-2xl mx-auto">
           More liquidity providers can mean <span className="text-white font-medium">less liquidity</span>.
-          JIT bots cherry-pick the most profitable trades, starving passive LPs.
+          JIT bots cherry-pick the most profitable trades, starving{' '}
+          <Tooltip term="Passive LPs" definition="Liquidity Providers who deposit assets into AMM pools over long periods without actively managing their positions. They earn fees but are exposed to impermanent loss and toxic flow.">passive LPs</Tooltip>.
           Toggle JIT on and off to see the systemic impact.
         </p>
       </div>

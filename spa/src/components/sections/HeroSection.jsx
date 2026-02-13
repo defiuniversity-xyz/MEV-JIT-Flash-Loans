@@ -3,7 +3,7 @@ import { Zap, ChevronDown, BookOpen, Shield, TrendingUp } from 'lucide-react';
 
 export default function HeroSection() {
   return (
-    <section id="hero" className="relative min-h-screen flex items-center justify-center overflow-hidden">
+    <section id="hero" className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden pt-20 pb-10">
       {/* Background gradient */}
       <div className="absolute inset-0 bg-gradient-to-b from-defi-navy via-defi-navy to-defi-dark" />
       <div className="absolute inset-0 opacity-30"

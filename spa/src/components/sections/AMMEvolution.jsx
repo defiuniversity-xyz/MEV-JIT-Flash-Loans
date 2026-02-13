@@ -1,5 +1,6 @@
 import SectionWrapper from '../layout/SectionWrapper';
 import LiquidityCurveViz from '../interactive/LiquidityCurveViz';
+import Tooltip from '../layout/Tooltip';
 import { BarChart3 } from 'lucide-react';
 
 export default function AMMEvolution() {
@@ -14,7 +15,11 @@ export default function AMMEvolution() {
         </h2>
         <p className="text-defi-muted max-w-2xl mx-auto">
           Uniswap V2 spread liquidity uniformly across all prices — most capital sat idle.
-          V3 introduced &quot;ticks&quot; allowing LPs to concentrate capital in narrow ranges, dramatically
+          V3 introduced{' '}
+          <Tooltip term="Ticks" definition="Discrete price points in Uniswap V3 defined by the formula p(i) = 1.0001^i. LPs concentrate capital within specific tick ranges instead of across all prices.">
+            &quot;ticks&quot;
+          </Tooltip>{' '}
+          allowing LPs to concentrate capital in narrow ranges, dramatically
           improving efficiency but enabling JIT liquidity attacks.
         </p>
       </div>

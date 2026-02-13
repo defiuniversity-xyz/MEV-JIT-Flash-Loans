@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronLeft, ChevronRight, AlertTriangle } from 'lucide-react';
+import { useKeyboardNav } from '../../hooks/useKeyboardNav';
 
 const steps = [
   {
@@ -57,6 +58,7 @@ const steps = [
 
 export default function OracleManipulationSim() {
   const [currentStep, setCurrentStep] = useState(0);
+  useKeyboardNav(currentStep, setCurrentStep, steps.length - 1);
   const step = steps[currentStep];
 
   const priceBarHeight = Math.min((step.tokenPrice / 500) * 100, 100);

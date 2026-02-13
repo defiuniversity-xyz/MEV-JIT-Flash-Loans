@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Play, Code, ArrowRight, Workflow, CheckCircle, ChevronLeft, ChevronRight } from 'lucide-react';
 import { flashLoanLifecycle } from '../../data/flashLoanContent';
+import { useKeyboardNav } from '../../hooks/useKeyboardNav';
 
 const ICONS = { Play, ArrowRight, Code, Workflow, CheckCircle };
 
@@ -25,6 +26,7 @@ const EntityBadge = ({ label, state }) => {
 
 export default function FlashLoanStepper() {
   const [currentStep, setCurrentStep] = useState(0);
+  useKeyboardNav(currentStep, setCurrentStep, flashLoanLifecycle.length - 1);
   const step = flashLoanLifecycle[currentStep];
   const Icon = ICONS[step.icon] || Play;
 

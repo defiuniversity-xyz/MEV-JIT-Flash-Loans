@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { useKeyboardNav } from '../../hooks/useKeyboardNav';
 
 const steps = [
   {
@@ -47,6 +48,7 @@ const steps = [
 
 export default function SandwichAttackSim() {
   const [currentStep, setCurrentStep] = useState(0);
+  useKeyboardNav(currentStep, setCurrentStep, steps.length - 1);
   const step = steps[currentStep];
 
   const priceRange = { min: 2990, max: 3040 };

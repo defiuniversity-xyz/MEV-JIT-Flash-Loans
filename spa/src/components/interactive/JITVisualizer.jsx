@@ -2,9 +2,11 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { jitSteps } from '../../data/mevJitContent';
+import { useKeyboardNav } from '../../hooks/useKeyboardNav';
 
 export default function JITVisualizer() {
   const [currentStep, setCurrentStep] = useState(0);
+  useKeyboardNav(currentStep, setCurrentStep, jitSteps.length - 1);
   const step = jitSteps[currentStep];
 
   const PieChart = ({ passive, jit }) => {
