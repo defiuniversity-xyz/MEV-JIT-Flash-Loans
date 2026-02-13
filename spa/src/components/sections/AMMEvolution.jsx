@@ -1,6 +1,7 @@
 import SectionWrapper from '../layout/SectionWrapper';
 import LiquidityCurveViz from '../interactive/LiquidityCurveViz';
 import Tooltip from '../layout/Tooltip';
+import KeyTakeaways from '../layout/KeyTakeaways';
 import { BarChart3 } from 'lucide-react';
 
 export default function AMMEvolution() {
@@ -44,6 +45,13 @@ export default function AMMEvolution() {
           </p>
         </div>
       </div>
+
+      <KeyTakeaways items={[
+        'Uniswap V2 spread liquidity across all prices (0 → ∞) — simple and robust, but only ~0.5% of capital was ever active.',
+        'V3\'s concentrated liquidity achieves up to 4000× capital efficiency by letting LPs choose specific price ranges.',
+        'The trade-off: concentrated liquidity can be ephemeral, enabling JIT attacks where bots inject and withdraw in a single block.',
+        'The era of "set and forget" LP is ending — active management or managed vaults are now required to compete.',
+      ]} />
     </SectionWrapper>
   );
 }

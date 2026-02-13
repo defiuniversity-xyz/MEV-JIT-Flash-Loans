@@ -2,6 +2,7 @@ import SectionWrapper from '../layout/SectionWrapper';
 import OracleManipulationSim from '../interactive/OracleManipulationSim';
 import AttackTimeline from '../interactive/AttackTimeline';
 import Tooltip from '../layout/Tooltip';
+import KeyTakeaways from '../layout/KeyTakeaways';
 import { AlertTriangle } from 'lucide-react';
 
 export default function FlashLoanAttacks() {
@@ -45,6 +46,13 @@ export default function FlashLoanAttacks() {
         </p>
         <AttackTimeline />
       </div>
+
+      <KeyTakeaways items={[
+        'Oracle manipulation is the #1 attack vector — protocols using spot prices from a single DEX are vulnerable to temporary price distortion.',
+        'Flash loans amplify existing bugs: a $10K exploit becomes $100M+ when the attacker can borrow unlimited capital for free.',
+        'Losses escalated from $350K (bZx 2020) to $197M (Euler 2023) as DeFi TVL grew and attack techniques matured.',
+        'Emerging threats include cross-chain latency exploits and read-only reentrancy — attacks are evolving beyond simple oracle manipulation.',
+      ]} />
     </SectionWrapper>
   );
 }

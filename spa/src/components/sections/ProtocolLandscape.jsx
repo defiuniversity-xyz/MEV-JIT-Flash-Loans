@@ -1,5 +1,6 @@
 import SectionWrapper from '../layout/SectionWrapper';
 import ProtocolCompareCards from '../interactive/ProtocolCompareCards';
+import KeyTakeaways from '../layout/KeyTakeaways';
 import { Layers } from 'lucide-react';
 
 export default function ProtocolLandscape() {
@@ -20,6 +21,13 @@ export default function ProtocolLandscape() {
       </div>
 
       <ProtocolCompareCards />
+
+      <KeyTakeaways items={[
+        'Balancer offers 0% flash loan fees via its single-Vault architecture — the cheapest option for pure arbitrage.',
+        'Aave V4 unifies liquidity into a central hub, maximizing borrowable capacity across all supplied assets.',
+        'MakerDAO\'s Flash Mint can create DAI that doesn\'t exist in any pool — limited only by the global debt ceiling.',
+        'dYdX\'s pivot to a Cosmos app-chain reduced flash loan composability compared to its Ethereum predecessor.',
+      ]} />
     </SectionWrapper>
   );
 }

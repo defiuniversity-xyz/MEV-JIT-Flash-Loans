@@ -1,6 +1,7 @@
 import SectionWrapper from '../layout/SectionWrapper';
 import SandwichAttackSim from '../interactive/SandwichAttackSim';
 import CrossChainGapViz from '../interactive/CrossChainGapViz';
+import KeyTakeaways from '../layout/KeyTakeaways';
 import { Target } from 'lucide-react';
 
 export default function RealWorldStrategies() {
@@ -39,6 +40,13 @@ export default function RealWorldStrategies() {
         </p>
         <CrossChainGapViz />
       </div>
+
+      <KeyTakeaways items={[
+        'Sandwich attacks exploit mempool transparency — your pending buy order is visible to everyone before it confirms.',
+        'Using private RPCs (Flashbots Protect) or intent-based systems (CoW Swap) prevents sandwich attacks entirely.',
+        'Cross-chain flash loans are impossible because bridges break atomicity — bridging takes minutes, not milliseconds.',
+        'Intent-based Solvers simulate cross-chain atomicity by filling orders with local capital, then settling bridges later.',
+      ]} />
     </SectionWrapper>
   );
 }

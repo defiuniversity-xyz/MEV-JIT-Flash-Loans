@@ -1,6 +1,7 @@
 import SectionWrapper from '../layout/SectionWrapper';
 import JITParadoxDemo from '../interactive/JITParadoxDemo';
 import Tooltip from '../layout/Tooltip';
+import KeyTakeaways from '../layout/KeyTakeaways';
 import { Scale } from 'lucide-react';
 
 export default function JITParadox() {
@@ -41,6 +42,13 @@ export default function JITParadox() {
           </p>
         </div>
       </div>
+
+      <KeyTakeaways items={[
+        'The paradox: JIT improves execution for individual large traders but degrades the market for everyone else.',
+        'Passive LPs are left with only small trades and toxic arbitrage flow — the profitable "uninformed" flow is cherry-picked by JIT bots.',
+        'If volume is inelastic, the market becomes "hollow" — deep for whales, shallow for retail.',
+        'Whether JIT is net positive depends on whether improved execution attracts enough new volume to offset LP revenue loss.',
+      ]} />
     </SectionWrapper>
   );
 }
