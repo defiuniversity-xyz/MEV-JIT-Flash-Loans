@@ -13,6 +13,10 @@ npm run build      # Production build in dist/
 npm run preview    # Preview production build
 ```
 
+## Deployment
+
+The app auto-deploys to GitHub Pages on push to `main` via the included GitHub Actions workflow (`.github/workflows/deploy.yml`). The Vite base path is automatically set to `/MEV-JIT-Flash-Loans/` when building in CI.
+
 ## Tech Stack
 
 | Layer | Technology |
