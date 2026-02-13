@@ -1,0 +1,92 @@
+export const protocols = [
+  {
+    id: 'aave',
+    name: 'Aave V3/V4',
+    mechanism: 'Flash Loan',
+    fee: '0.05%',
+    liquiditySource: 'Lending Pool Deposits',
+    primaryUse: 'General Arbitrage, Refinancing',
+    color: '#B6509E',
+    description:
+      'Aave pioneered commercial flash loans and remains the volume leader. V3 introduced flashLoanSimple() for single-asset gas optimization and "Portal" for cross-chain liquidity. V4 (2026) introduces a Unified Liquidity Layer, pooling all supplied assets into a central hub for maximum borrowable capacity.',
+    keyFeatures: [
+      'flashLoanSimple() for gas-efficient single-asset loans',
+      'Unified Liquidity Layer in V4 (all pools consolidated)',
+      'Flash Loan Resistant flags for volatile assets',
+      'Portal for cross-chain flash liquidity via bridges',
+      'Fee split between liquidity providers and protocol treasury',
+    ],
+  },
+  {
+    id: 'uniswap',
+    name: 'Uniswap V3',
+    mechanism: 'Flash Swap',
+    fee: 'Pool Fee (0.05%–1%)',
+    liquiditySource: 'Specific Trading Pair',
+    primaryUse: 'Self-contained Swaps',
+    color: '#FF007A',
+    description:
+      'Uniswap V2 introduced "Flash Swaps" — optimistic token withdrawals where users pay or return tokens by transaction end. V3 separated this into a dedicated flash() function. There is no separate flash loan fee; users pay the pool trading fee (0.05%, 0.30%, or 1.00%), making it expensive for pure borrowing but efficient for in-pool strategies.',
+    keyFeatures: [
+      'No separate flash loan fee — uses pool tier fee',
+      'Optimistic withdrawal model (send tokens before k-check)',
+      'Best for strategies involving trading within the same pool',
+      'Concentrated liquidity enables capital-efficient flash swaps',
+      'V4 Hooks will add programmable pre/post-swap logic',
+    ],
+  },
+  {
+    id: 'balancer',
+    name: 'Balancer V2/V3',
+    mechanism: 'Flash Loan',
+    fee: '0%',
+    liquiditySource: 'Global Vault',
+    primaryUse: 'High-frequency Arbitrage',
+    color: '#1E1E1E',
+    description:
+      'Balancer aggressively targets arbitrageurs with zero-fee flash loans. V2 uses a single Vault contract holding all assets for every pool, creating billions in accessible liquidity via one call. V3 (2026) optimizes with Transient Storage (EIP-1153), reducing gas costs by wiping debt accounting slots at transaction end.',
+    keyFeatures: [
+      '0% fee on all flash loans',
+      'Single Vault architecture — massive unified liquidity',
+      'Attracts arbitrageurs to keep Balancer pools correctly priced',
+      'V3 uses EIP-1153 Transient Storage for gas optimization',
+      'Encourages organic trade volume through correct pricing',
+    ],
+  },
+  {
+    id: 'dydx',
+    name: 'dYdX V4',
+    mechanism: 'Transaction Bundle',
+    fee: 'Variable',
+    liquiditySource: 'App-Chain Liquidity',
+    primaryUse: 'Market Making on Cosmos',
+    color: '#6966FF',
+    description:
+      'dYdX was historically a major free flash loan source on Ethereum via SoloMargin. With V4 as a standalone Cosmos app-chain, permissionless flash loans are less central. Cosmos modules allow atomic bundling, but the composability of Ethereum is absent, shifting arbitrage to specialized market maker bots on validators.',
+    keyFeatures: [
+      'Transitioned from Ethereum to Cosmos app-chain',
+      'Less composable than EVM flash loans',
+      'Specialized market maker bots on validators',
+      'Atomic transaction bundling via Cosmos modules',
+      'Focus shifted to perpetual futures trading',
+    ],
+  },
+  {
+    id: 'makerdao',
+    name: 'MakerDAO',
+    mechanism: 'Flash Mint',
+    fee: '~0.05% (Gov)',
+    liquiditySource: 'Minted DAI (Infinite)',
+    primaryUse: 'DAI-specific strategies',
+    color: '#1AAB9B',
+    description:
+      'MakerDAO does not lend existing assets — it mints new DAI. The Flash Mint Module allows users to create DAI up to the global debt ceiling (billions). This provides the deepest DAI liquidity in the ecosystem; a user can borrow 500M DAI even if that amount doesn\'t exist in any single pool.',
+    keyFeatures: [
+      'Mints new DAI rather than lending existing tokens',
+      'Deepest possible DAI liquidity (up to debt ceiling)',
+      'Fee configurable by governance (~0.05%)',
+      'Can mint more DAI than exists in any pool',
+      'Ideal for DAI-centric arbitrage and refinancing',
+    ],
+  },
+];
