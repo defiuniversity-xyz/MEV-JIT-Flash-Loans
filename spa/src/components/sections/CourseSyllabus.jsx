@@ -1,29 +1,32 @@
-import { motion } from 'framer-motion';
-import { Check, BookOpen, RotateCcw } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Check, BookOpen, RotateCcw, Clock, Trophy } from 'lucide-react';
 import SectionWrapper from '../layout/SectionWrapper';
 import { SECTIONS } from '../../data/constants';
 
 const SECTION_META = {
-  hero: { desc: 'Welcome & overview', icon: '🏠' },
-  atomicity: { desc: 'EVM execution model — all or nothing', icon: '⚛️' },
-  'flash-loan-mechanics': { desc: '5-step flash loan lifecycle', icon: '⚡' },
-  'use-cases': { desc: 'Arbitrage, collateral swap, self-liquidation', icon: '💰' },
-  attacks: { desc: 'Oracle manipulation & major exploits', icon: '🔴' },
-  protocols: { desc: 'Aave, Uniswap, Balancer, dYdX, MakerDAO', icon: '🏛️' },
-  mev: { desc: 'MEV supply chain & strategy taxonomy', icon: '👁️' },
-  'amm-evolution': { desc: 'V2 uniform → V3 concentrated liquidity', icon: '📊' },
-  jit: { desc: 'Just-In-Time liquidity mechanics', icon: '🎯' },
-  'jit-paradox': { desc: 'Why more LPs can mean less liquidity', icon: '⚖️' },
-  strategies: { desc: 'Sandwich attacks & cross-chain gap', icon: '🥪' },
-  future: { desc: 'V4 Hooks, Intents, SUAVE/TEEs', icon: '🚀' },
-  security: { desc: 'Reentrancy, TWAP, circuit breakers', icon: '🛡️' },
-  quiz: { desc: '10-question knowledge check', icon: '🎓' },
+  hero: { desc: 'Welcome & overview', icon: '🏠', mins: 1 },
+  atomicity: { desc: 'EVM execution model — all or nothing', icon: '⚛️', mins: 3 },
+  'flash-loan-mechanics': { desc: '5-step flash loan lifecycle', icon: '⚡', mins: 4 },
+  'use-cases': { desc: 'Arbitrage, collateral swap, self-liquidation', icon: '💰', mins: 5 },
+  attacks: { desc: 'Oracle manipulation & major exploits', icon: '🔴', mins: 5 },
+  protocols: { desc: 'Aave, Uniswap, Balancer, dYdX, MakerDAO', icon: '🏛️', mins: 4 },
+  mev: { desc: 'MEV supply chain & strategy taxonomy', icon: '👁️', mins: 4 },
+  'amm-evolution': { desc: 'V2 uniform → V3 concentrated liquidity', icon: '📊', mins: 3 },
+  jit: { desc: 'Just-In-Time liquidity mechanics', icon: '🎯', mins: 4 },
+  'jit-paradox': { desc: 'Why more LPs can mean less liquidity', icon: '⚖️', mins: 3 },
+  strategies: { desc: 'Sandwich attacks & cross-chain gap', icon: '🥪', mins: 4 },
+  future: { desc: 'V4 Hooks, Intents, SUAVE/TEEs', icon: '🚀', mins: 3 },
+  security: { desc: 'Reentrancy, TWAP, circuit breakers', icon: '🛡️', mins: 3 },
+  quiz: { desc: '10-question knowledge check', icon: '🎓', mins: 5 },
 };
+
+const TOTAL_MINS = Object.values(SECTION_META).reduce((sum, m) => sum + m.mins, 0);
 
 export default function CourseSyllabus({ visitedSections, onResetProgress }) {
   const completed = visitedSections.size;
   const total = SECTIONS.length;
   const pct = Math.round((completed / total) * 100);
+  const allComplete = completed >= total;
 
   const scrollTo = (id) => {
     const el = document.getElementById(id);
@@ -39,20 +42,40 @@ export default function CourseSyllabus({ visitedSections, onResetProgress }) {
         <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">
           Course Overview
         </h2>
-        <p className="text-defi-muted max-w-2xl mx-auto mb-6">
-          14 interactive sections from fundamentals to advanced strategies.
+        <p className="text-defi-muted max-w-2xl mx-auto mb-2">
+          {total} interactive sections from fundamentals to advanced strategies.
           Click any section to jump directly to it. Your progress is saved automatically.
         </p>
+        <p className="text-xs text-defi-muted inline-flex items-center gap-1.5">
+          <Clock className="w-3 h-3" /> Estimated total: ~{TOTAL_MINS} minutes
+        </p>
+
+        {/* Completion celebration */}
+        <AnimatePresence>
+          {allComplete && (
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              className="mt-6 glass rounded-xl p-5 max-w-md mx-auto border border-defi-amber/30"
+            >
+              <Trophy className="w-8 h-8 text-defi-amber mx-auto mb-2" />
+              <div className="text-sm font-semibold text-white">Course Complete!</div>
+              <p className="text-xs text-defi-muted mt-1">
+                You&apos;ve explored all {total} sections. Take the quiz below to test your knowledge.
+              </p>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
         {/* Overall progress */}
-        <div className="max-w-md mx-auto">
+        <div className="max-w-md mx-auto mt-6">
           <div className="flex justify-between text-xs text-defi-muted mb-2">
             <span>{completed} of {total} sections explored</span>
             <span>{pct}%</span>
           </div>
           <div className="h-2 bg-defi-dark rounded-full overflow-hidden">
             <motion.div
-              className="h-full bg-gradient-to-r from-defi-blue to-defi-green rounded-full"
+              className={`h-full rounded-full ${allComplete ? 'bg-defi-amber' : 'bg-gradient-to-r from-defi-blue to-defi-green'}`}
               animate={{ width: `${pct}%` }}
               transition={{ duration: 0.5 }}
             />
@@ -71,7 +94,7 @@ export default function CourseSyllabus({ visitedSections, onResetProgress }) {
       {/* Section grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 max-w-4xl mx-auto">
         {SECTIONS.map((section, i) => {
-          const meta = SECTION_META[section.id] || { desc: '', icon: '📄' };
+          const meta = SECTION_META[section.id] || { desc: '', icon: '📄', mins: 2 };
           const visited = visitedSections.has(section.id);
 
           return (
@@ -95,7 +118,10 @@ export default function CourseSyllabus({ visitedSections, onResetProgress }) {
                   <span className="text-sm font-medium text-white truncate">{section.label}</span>
                   {visited && <Check className="w-3.5 h-3.5 text-defi-green flex-shrink-0" />}
                 </div>
-                <p className="text-xs text-defi-muted mt-0.5 line-clamp-1">{meta.desc}</p>
+                <div className="flex items-center gap-2 mt-0.5">
+                  <p className="text-xs text-defi-muted truncate">{meta.desc}</p>
+                  <span className="text-[10px] text-defi-muted/60 flex-shrink-0">~{meta.mins}m</span>
+                </div>
               </div>
             </motion.button>
           );
