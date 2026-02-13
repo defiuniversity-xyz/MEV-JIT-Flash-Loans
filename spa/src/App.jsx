@@ -34,7 +34,7 @@ function Divider() {
 }
 
 export default function App() {
-  const [visitedSections, markVisited] = useProgress();
+  const [visitedSections, markVisited, resetProgress] = useProgress();
 
   return (
     <div className="min-h-screen bg-defi-navy text-defi-text overflow-x-hidden">
@@ -42,7 +42,7 @@ export default function App() {
       <main>
         <HeroSection />
         <Divider />
-        <CourseSyllabus visitedSections={visitedSections} />
+        <CourseSyllabus visitedSections={visitedSections} onResetProgress={resetProgress} />
         <Divider />
         <AtomicitySection />
         <Divider />

@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { Check, BookOpen } from 'lucide-react';
+import { Check, BookOpen, RotateCcw } from 'lucide-react';
 import SectionWrapper from '../layout/SectionWrapper';
 import { SECTIONS } from '../../data/constants';
 
@@ -20,7 +20,7 @@ const SECTION_META = {
   quiz: { desc: '10-question knowledge check', icon: '🎓' },
 };
 
-export default function CourseSyllabus({ visitedSections }) {
+export default function CourseSyllabus({ visitedSections, onResetProgress }) {
   const completed = visitedSections.size;
   const total = SECTIONS.length;
   const pct = Math.round((completed / total) * 100);
@@ -57,6 +57,14 @@ export default function CourseSyllabus({ visitedSections }) {
               transition={{ duration: 0.5 }}
             />
           </div>
+          {completed > 1 && (
+            <button
+              onClick={onResetProgress}
+              className="mt-3 text-[10px] text-defi-muted hover:text-defi-red transition-colors inline-flex items-center gap-1"
+            >
+              <RotateCcw className="w-3 h-3" /> Reset progress
+            </button>
+          )}
         </div>
       </div>
 

@@ -82,9 +82,21 @@ function QuizQuestion({ question, onAnswer, answered, selectedAnswer }) {
   );
 }
 
-function ScoreCard({ score, total, onReset }) {
+function getBestScore() {
+  try { return Number(localStorage.getItem('defi-academy-best-score') || 0); } catch { return 0; }
+}
+
+function saveBestScore(score) {
+  try {
+    const prev = getBestScore();
+    if (score > prev) localStorage.setItem('defi-academy-best-score', String(score));
+  } catch { /* noop */ }
+}
+
+function ScoreCard({ score, total, onReset, bestScore }) {
   const pct = Math.round((score / total) * 100);
   const grade = pct >= 90 ? 'A' : pct >= 80 ? 'B' : pct >= 70 ? 'C' : pct >= 60 ? 'D' : 'F';
+  const isNewBest = score > bestScore;
   const message =
     pct === 100 ? 'Perfect score! You\'ve mastered DeFi mechanics.' :
     pct >= 80 ? 'Excellent understanding of DeFi fundamentals!' :
@@ -99,7 +111,13 @@ function ScoreCard({ score, total, onReset }) {
     >
       <Trophy className={`w-12 h-12 mx-auto mb-4 ${pct >= 80 ? 'text-defi-amber' : 'text-defi-muted'}`} />
       <div className="text-5xl font-bold text-white font-mono mb-1">{score}/{total}</div>
-      <div className="text-sm text-defi-muted mb-4">{pct}% — Grade {grade}</div>
+      <div className="text-sm text-defi-muted mb-2">{pct}% — Grade {grade}</div>
+      {isNewBest && score > 0 && (
+        <div className="text-xs text-defi-amber font-medium mb-2">🏆 New personal best!</div>
+      )}
+      {bestScore > 0 && !isNewBest && (
+        <div className="text-xs text-defi-muted mb-2">Best: {bestScore}/{total}</div>
+      )}
       <p className="text-sm text-defi-muted mb-6 max-w-md mx-auto">{message}</p>
       <button
         onClick={onReset}
@@ -115,6 +133,7 @@ export default function KnowledgeQuiz() {
   const [currentQ, setCurrentQ] = useState(0);
   const [answers, setAnswers] = useState({});
   const [showScore, setShowScore] = useState(false);
+  const [bestScore] = useState(() => getBestScore());
 
   const question = quizQuestions[currentQ];
   const answered = answers[question.id] !== undefined;
@@ -131,6 +150,7 @@ export default function KnowledgeQuiz() {
     if (currentQ < quizQuestions.length - 1) {
       setCurrentQ(currentQ + 1);
     } else {
+      saveBestScore(score);
       setShowScore(true);
     }
   };
@@ -216,7 +236,7 @@ export default function KnowledgeQuiz() {
         </div>
       ) : (
         <div className="max-w-lg mx-auto">
-          <ScoreCard score={score} total={quizQuestions.length} onReset={handleReset} />
+          <ScoreCard score={score} total={quizQuestions.length} onReset={handleReset} bestScore={bestScore} />
         </div>
       )}
     </SectionWrapper>

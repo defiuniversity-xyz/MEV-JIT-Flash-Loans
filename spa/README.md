@@ -45,8 +45,9 @@ No backend required — all simulations run client-side.
 12. **Future** — Uniswap V4 Hooks, Intent-based architectures, SUAVE/TEEs
 13. **Security** — Interactive checklist + EIP-3156 Solidity code with syntax highlighting
 
-### Assessment (Section 14)
-14. **Knowledge Quiz** — 10 multiple-choice questions with instant feedback, explanations, score tracking, and grade card
+### Navigation & Assessment
+- **Course Syllabus** — Clickable table of contents with 14 section cards, progress bar, and completion checkmarks
+15. **Knowledge Quiz** — 10 multiple-choice questions with instant feedback, explanations, score tracking, grade card, and best-score persistence
 
 ## Interactive Elements (16+)
 
@@ -73,7 +74,8 @@ No backend required — all simulations run client-side.
 
 - **Dark theme** — Deep navy (#0f172a) with glassmorphism cards
 - **Scroll animations** — Sections fade in on scroll via Intersection Observer
-- **Section progress tracker** — Navbar shows visited sections (X/14) with green dots
+- **Section progress tracker** — Navbar shows visited sections (X/14) with green dots, persisted in localStorage
+- **Course Syllabus** — Clickable section grid with completion tracking, progress bar, and reset option
 - **Back-to-top button** — Floating button appears after scrolling
 - **Gradient section dividers** — Subtle separators between all 13 sections
 - **Keyboard navigation** — Arrow keys step through all 4 stepper components
