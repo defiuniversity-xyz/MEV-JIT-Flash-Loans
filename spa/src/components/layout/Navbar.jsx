@@ -6,6 +6,7 @@ import { SECTIONS } from '../../data/constants';
 export default function Navbar() {
   const [scrollProgress, setScrollProgress] = useState(0);
   const [activeSection, setActiveSection] = useState('hero');
+  const [visitedSections, setVisitedSections] = useState(new Set(['hero']));
   const [mobileOpen, setMobileOpen] = useState(false);
 
   useEffect(() => {
@@ -24,6 +25,7 @@ export default function Navbar() {
         const rect = sections[i].el.getBoundingClientRect();
         if (rect.top <= 120) {
           setActiveSection(sections[i].id);
+          setVisitedSections((prev) => new Set([...prev, sections[i].id]));
           break;
         }
       }
@@ -50,27 +52,43 @@ export default function Navbar() {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
         <div className="flex items-center justify-between h-14">
-          {/* Logo */}
-          <button onClick={() => scrollTo('hero')} className="flex items-center gap-2 text-white font-bold text-lg">
-            <Zap className="w-5 h-5 text-defi-blue" />
-            <span className="hidden sm:inline">DeFi Academy</span>
-          </button>
+          {/* Logo + progress */}
+          <div className="flex items-center gap-3">
+            <button onClick={() => scrollTo('hero')} className="flex items-center gap-2 text-white font-bold text-lg">
+              <Zap className="w-5 h-5 text-defi-blue" />
+              <span className="hidden sm:inline">DeFi Academy</span>
+            </button>
+            {visitedSections.size > 1 && (
+              <span className="hidden sm:inline-flex items-center gap-1 text-[10px] text-defi-muted bg-defi-dark px-2 py-1 rounded-full border border-defi-border">
+                <span className="text-defi-blue font-bold">{visitedSections.size}</span>
+                <span>/ {SECTIONS.length}</span>
+              </span>
+            )}
+          </div>
 
           {/* Desktop nav */}
           <div className="hidden lg:flex items-center gap-1">
-            {SECTIONS.slice(1).map((section) => (
-              <button
-                key={section.id}
-                onClick={() => scrollTo(section.id)}
-                className={`px-2.5 py-1.5 rounded-md text-xs font-medium transition-colors ${
-                  activeSection === section.id
-                    ? 'text-defi-blue bg-defi-blue/10'
-                    : 'text-defi-muted hover:text-defi-text hover:bg-white/5'
-                }`}
-              >
-                {section.label}
-              </button>
-            ))}
+            {SECTIONS.slice(1).map((section) => {
+              const visited = visitedSections.has(section.id);
+              return (
+                <button
+                  key={section.id}
+                  onClick={() => scrollTo(section.id)}
+                  className={`relative px-2.5 py-1.5 rounded-md text-xs font-medium transition-colors ${
+                    activeSection === section.id
+                      ? 'text-defi-blue bg-defi-blue/10'
+                      : visited
+                        ? 'text-defi-text/70 hover:text-defi-text hover:bg-white/5'
+                        : 'text-defi-muted hover:text-defi-text hover:bg-white/5'
+                  }`}
+                >
+                  {section.label}
+                  {visited && activeSection !== section.id && (
+                    <span className="absolute -top-0.5 -right-0.5 w-1.5 h-1.5 rounded-full bg-defi-green" />
+                  )}
+                </button>
+              );
+            })}
           </div>
 
           {/* Mobile toggle */}

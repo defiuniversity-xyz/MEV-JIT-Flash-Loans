@@ -1,6 +1,8 @@
 import SectionWrapper from '../layout/SectionWrapper';
 import JITVisualizer from '../interactive/JITVisualizer';
 import Tooltip from '../layout/Tooltip';
+import KeyTakeaways from '../layout/KeyTakeaways';
+import AnimatedCounter from '../layout/AnimatedCounter';
 import { jitMetrics } from '../../data/mevJitContent';
 import { motion } from 'framer-motion';
 import { Crosshair } from 'lucide-react';
@@ -26,11 +28,18 @@ export default function JITDeepDive() {
 
       <JITVisualizer />
 
-      {/* Key Metrics */}
+      {/* Key Metrics with animated counters */}
       <div className="mt-10">
         <h3 className="text-lg font-semibold text-white mb-5 text-center">Empirical Data</h3>
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
-          {jitMetrics.map((metric, i) => (
+          {[
+            { end: 269, suffix: '×', label: 'Avg. Liquidity Multiplier', desc: 'swap volume required' },
+            { end: 0.007, suffix: '%', label: 'Avg. ROI per Attack', desc: 'razor-thin margins', decimals: 3 },
+            { end: 85, suffix: '%', prefix: '~', label: 'Fee Dilution', desc: 'passive LP loss per JIT block' },
+            { end: 92, suffix: '%', label: 'Dominant Bot Share', desc: 'single address (0xa57…6CF)' },
+            { end: 1, suffix: '%', prefix: '<', label: 'Total V3 Liquidity', desc: 'niche sniper strategy' },
+            { end: 0.139, suffix: '%', label: 'Avg. Price Improvement', desc: '13.9 bps for targeted traders', decimals: 3 },
+          ].map((metric, i) => (
             <motion.div
               key={i}
               initial={{ opacity: 0, y: 20 }}
@@ -39,13 +48,27 @@ export default function JITDeepDive() {
               transition={{ delay: i * 0.08 }}
               className="glass rounded-xl p-4 text-center"
             >
-              <div className="text-xl font-bold text-defi-amber font-mono mb-1">{metric.value}</div>
-              <div className="text-xs text-white font-medium mb-1">{metric.label}</div>
-              <div className="text-[10px] text-defi-muted">{metric.description}</div>
+              <AnimatedCounter
+                end={metric.end}
+                prefix={metric.prefix}
+                suffix={metric.suffix}
+                decimals={metric.decimals || 0}
+                duration={1500}
+                className="text-xl font-bold text-defi-amber font-mono"
+              />
+              <div className="text-xs text-white font-medium mt-1 mb-1">{metric.label}</div>
+              <div className="text-[10px] text-defi-muted">{metric.desc}</div>
             </motion.div>
           ))}
         </div>
       </div>
+
+      <KeyTakeaways items={[
+        'JIT is a "whale\'s game" — requires 269× the swap volume in liquidity and razor-thin 0.007% ROI per transaction.',
+        'A single bot address captured 92% of all JIT profit, showing extreme centralization of this strategy.',
+        'Passive LPs lose ~85% of fee revenue on blocks where JIT occurs — but traders get 0.139% better execution.',
+        'JIT accounts for less than 1% of total V3 liquidity but has disproportionate impact on high-volume pools.',
+      ]} />
     </SectionWrapper>
   );
 }

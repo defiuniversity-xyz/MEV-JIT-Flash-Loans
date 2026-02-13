@@ -1,6 +1,7 @@
 import SectionWrapper from '../layout/SectionWrapper';
 import AtomicityVisualizer from '../interactive/AtomicityVisualizer';
 import Tooltip from '../layout/Tooltip';
+import KeyTakeaways from '../layout/KeyTakeaways';
 import { Atom } from 'lucide-react';
 
 export default function AtomicitySection() {
@@ -45,6 +46,13 @@ export default function AtomicitySection() {
           </div>
         ))}
       </div>
+
+      <KeyTakeaways items={[
+        'Flash loans exploit EVM atomicity — a transaction either fully succeeds or fully reverts with zero partial state.',
+        'Default risk is binary and deterministic, not probabilistic. The lender can never lose funds.',
+        'Risk shifts entirely from credit risk (will they pay?) to smart contract risk (is the code secure?).',
+        'Any Ethereum address can access hundreds of millions in capital — the only cost of failure is the gas fee.',
+      ]} />
     </SectionWrapper>
   );
 }

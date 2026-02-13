@@ -17,15 +17,15 @@ export default function AttackTimeline() {
           const isExpanded = expanded === attack.id;
 
           return (
-            <div key={attack.id} className={`relative flex items-start ${isLeft ? 'sm:flex-row' : 'sm:flex-row-reverse'}`}>
+            <div key={attack.id} className={`relative flex items-start flex-row ${isLeft ? 'sm:flex-row' : 'sm:flex-row-reverse'}`}>
               {/* Dot */}
               <div
                 className="absolute left-4 sm:left-1/2 w-3 h-3 rounded-full -translate-x-1/2 z-10 border-2 border-defi-navy"
                 style={{ backgroundColor: attack.color }}
               />
 
-              {/* Content */}
-              <div className={`ml-10 sm:ml-0 sm:w-[calc(50%-2rem)] ${isLeft ? 'sm:pr-8' : 'sm:pl-8'}`}>
+              {/* Content — always left-aligned on mobile, alternating on desktop */}
+              <div className={`ml-10 sm:ml-0 w-full sm:w-[calc(50%-2rem)] ${isLeft ? 'sm:pr-8' : 'sm:pl-8'}`}>
                 <motion.button
                   onClick={() => setExpanded(isExpanded ? null : attack.id)}
                   className="glass rounded-xl p-4 w-full text-left hover:border-defi-blue/30 transition-colors cursor-pointer"

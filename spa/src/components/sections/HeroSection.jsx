@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
 import { Zap, ChevronDown, BookOpen, Shield, TrendingUp } from 'lucide-react';
+import AnimatedCounter from '../layout/AnimatedCounter';
 
 export default function HeroSection() {
   return (
@@ -50,6 +51,32 @@ export default function HeroSection() {
               <item.icon className={`w-6 h-6 ${item.color} mb-3`} />
               <h3 className="text-white font-semibold mb-1">{item.label}</h3>
               <p className="text-sm text-defi-muted">{item.desc}</p>
+            </div>
+          ))}
+        </motion.div>
+
+        {/* Stats bar */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.5 }}
+          className="flex flex-wrap justify-center gap-6 sm:gap-10 mb-12"
+        >
+          {[
+            { end: 2, prefix: '$', suffix: 'T+', label: 'Flash Loan Volume (2024)', decimals: 0 },
+            { end: 13, suffix: '', label: 'Interactive Sections', decimals: 0 },
+            { end: 12, suffix: '+', label: 'Hands-On Simulations', decimals: 0 },
+          ].map((stat, i) => (
+            <div key={i} className="text-center">
+              <AnimatedCounter
+                end={stat.end}
+                prefix={stat.prefix}
+                suffix={stat.suffix}
+                decimals={stat.decimals}
+                duration={1800}
+                className="text-2xl sm:text-3xl font-bold text-white font-mono"
+              />
+              <div className="text-[10px] sm:text-xs text-defi-muted mt-1">{stat.label}</div>
             </div>
           ))}
         </motion.div>

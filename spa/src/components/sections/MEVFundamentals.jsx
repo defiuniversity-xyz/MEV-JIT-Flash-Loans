@@ -2,6 +2,7 @@ import { motion } from 'framer-motion';
 import SectionWrapper from '../layout/SectionWrapper';
 import MEVSupplyChainFlow from '../interactive/MEVSupplyChainFlow';
 import Tooltip from '../layout/Tooltip';
+import KeyTakeaways from '../layout/KeyTakeaways';
 import { mevStrategies } from '../../data/mevJitContent';
 import { Eye } from 'lucide-react';
 
@@ -63,6 +64,13 @@ export default function MEVFundamentals() {
           ))}
         </div>
       </div>
+
+      <KeyTakeaways items={[
+        'MEV is extracted by reordering, including, or excluding transactions within a block — it\'s a tax on blockchain transparency.',
+        'The supply chain is industrialized: Users → Searchers → Builders → Relayers → Validators, each specializing in their role.',
+        'Not all MEV is harmful: arbitrage enforces price efficiency, while sandwich attacks are purely predatory.',
+        'Flashbots and PBS (Proposer-Builder Separation) formalized MEV extraction to reduce network congestion.',
+      ]} />
     </SectionWrapper>
   );
 }
