@@ -1,0 +1,200 @@
+﻿The Mechanics of Market Microstructure: An Exhaustive Analysis of Maximal Extractable Value and Just-In-Time Liquidity in Decentralized Finance
+1. Executive Summary
+The transition of Decentralized Finance (DeFi) from a niche experimental sandbox to a global financial infrastructure processing billions in daily volume has been underpinned by a fundamental evolution in market microstructure. At the heart of this evolution lies the shift from the Constant Product Market Maker (CPMM) model, popularized by Uniswap V2, to the Concentrated Liquidity Market Maker (CLMM) model introduced in Uniswap V3. This structural transformation, designed to enhance capital efficiency, inadvertently birthed a sophisticated, high-frequency trading phenomenon known as Just-In-Time (JIT) liquidity. JIT liquidity represents the apex of Maximal Extractable Value (MEV) strategies—a complex interplay of algorithmic execution, game theory, and protocol design that challenges the traditional understanding of liquidity provision.
+This report provides a comprehensive, expert-level dissection of the JIT liquidity phenomenon. It moves beyond superficial definitions to explore the atomic mechanics of JIT execution, the quantitative economics driving searcher profitability, and the paradoxical impact of these strategies on long-term market health. By synthesizing empirical data from the Ethereum mainnet, Layer 2 scaling solutions like Base and Arbitrum, and academic literature on the "JIT Paradox," we demonstrate that while JIT liquidity offers immediate price improvement for individual traders, it systematically degrades the revenue model for passive liquidity providers (LPs), potentially destabilizing the ecosystem's foundational liquidity layer.
+Furthermore, we project the trajectory of JIT through the lens of emerging technologies. The impending launch of Uniswap V4 with its programmable "Hooks," the rise of intent-centric architectures like CoW Swap that abstract execution away from the public mempool, and the development of privacy-preserving infrastructure like Flashbots' SUAVE (Single Unified Auction for Value Expression) are poised to fundamentally alter the MEV landscape. We argue that the industry is moving toward a bifurcated market structure: one where "toxic" MEV is mitigated through cryptographic privacy and protocol-level penalties, and "benign" JIT is formalized into a competitive market for guaranteed execution quality.
+2. The Evolution of On-Chain Liquidity and the Genesis of MEV
+To fully comprehend the mechanics and implications of JIT liquidity, one must first deconstruct the environment in which it operates. The history of automated market makers (AMMs) is a history of the trade-off between simplicity and efficiency.
+2.1 From Infinite to Concentrated Liquidity
+In the initial iteration of AMMs (Uniswap V1/V2), liquidity was distributed uniformly across the entire price curve   .1 This "lazy" liquidity provision meant that for any given trade, only a microscopic fraction of the deposited capital was actually utilized to facilitate the swap. The remaining capital sat idle, earning no fees but remaining exposed to impermanent loss. While this model democratized market making by requiring zero sophistication from LPs, it was inherently capital inefficient.
+Uniswap V3 introduced the concept of "ticks"—discrete price points defined by the formula   .2 Liquidity providers could now concentrate their capital within specific tick ranges   . This innovation allowed LPs to simulate the depth of an order book while retaining the AMM's passive execution model. However, it also introduced a critical vulnerability: if liquidity could be concentrated, it could also be ephemeral. A sophisticated actor could theoretically inject massive liquidity into a single tick for a single block to capture the fees from a specific trade, then withdraw it immediately. This is the genesis of JIT liquidity.
+2.2 Defining Maximal Extractable Value (MEV)
+MEV is the value extracted from block production in excess of the standard block reward and gas fees by including, excluding, and changing the order of transactions in a block.3 It is a direct consequence of the transparency of the blockchain mempool (memory pool), where pending transactions are visible to all network participants before they are confirmed.
+Historically, MEV was dominated by "Priority Gas Auctions" (PGAs), where bots spammed the network with high-gas transactions to ensure their arbitrage or front-running transactions were included. This caused network congestion and high fees for regular users. The ecosystem responded with the Proposer-Builder Separation (PBS) architecture, most notably implemented by Flashbots.4
+2.2.1 The Modern MEV Supply Chain
+The industrialization of MEV has led to a highly specialized supply chain:
+* Users: Originate transactions (swaps, transfers) via wallets and RPCs.
+* Searchers: Highly specialized algorithmic traders who scan the mempool for MEV opportunities (arbitrage, sandwich attacks, JIT). They bundle their transactions with user transactions to guarantee atomic execution.5
+* Builders: Entities that aggregate bundles from searchers and standard transactions from the mempool to construct full blocks. They optimize for the highest total value (fees + bribes).4
+* Relayers: Trusted intermediaries that pass block headers from builders to validators, preventing validators from stealing the builders' strategies.3
+* Validators: The ultimate proposers who commit the block to the blockchain in exchange for the builder's bid.4
+JIT liquidity is a product of this mature supply chain. It requires the atomicity provided by Flashbots bundles to eliminate the risk of holding inventory across blocks. Without the guarantee that the Mint, Swap, and Burn transactions will execute in precise order within the same block, JIT strategies would be financially suicidal due to inventory risk.2
+2.3 Taxonomy of MEV Strategies
+Understanding JIT requires distinguishing it from other forms of MEV. While often grouped with predatory strategies, JIT occupies a unique economic niche.
+
+
+Strategy
+	Mechanism
+	Target/Victim
+	Economic Impact
+	Atomic Arbitrage
+	Exploits price discrepancies between two DEXs (e.g., Uniswap vs. Sushiswap).
+	Passive LPs (Impermanent Loss)
+	Benign/Positive: Enforces price convergence and market efficiency.
+	Sandwich Attack
+	Front-runs a user's buy order to raise the price, then back-runs it to sell at a profit.
+	The Trader (High Slippage)
+	Predatory/Negative: Extracts value directly from the user; degrades execution quality.6
+	Liquidation
+	Monitors under-collateralized loans to trigger liquidations and earn a bounty.
+	Borrowers (Loss of Collateral)
+	Systemic: Necessary for the solvency of lending protocols.
+	JIT Liquidity
+	Mints liquidity immediately before a trade and burns it immediately after.
+	Passive LPs (Fee Dilution)
+	Ambiguous: Improves execution for the trader (lower slippage) but starves passive LPs of revenue.7
+	The ESMA (European Securities and Markets Authority) has noted that while sandwich attacks are widely considered market abuse akin to front-running in traditional finance, JIT liquidity presents a regulatory gray area because it technically benefits the consumer at the point of execution.6
+3. Unpacking JIT Liquidity: Mechanics and Execution
+Just-In-Time liquidity is not merely a trading strategy; it is a high-frequency market-making operation compressed into the timeframe of a single block (12 seconds on Ethereum, significantly less on L2s). It leverages the deterministic nature of transaction ordering in the PBS model to provide "flash liquidity."
+3.1 The Atomic Transaction Loop
+A JIT attack is composed of three distinct transactions packaged into a single "bundle." The searcher submits this bundle to a block builder with a "bribe" (tip) to ensure inclusion. The sequence is rigid and non-negotiable 1:
+1. Tx 1: The Mint (Front-run) The searcher mints a concentrated liquidity position (  ) in the exact tick range    where the victim's swap (  ) will execute. This range is typically extremely narrow—often a single tick (0.01%)—to maximize capital efficiency. By concentrating massive liquidity in this narrow band, the searcher ensures that their liquidity constitutes the vast majority of the active liquidity in that tick.8
+2. Tx 2: The Victim Swap (The Meat) The user's swap executes. Because the AMM algorithm distributes fees pro-rata based on active liquidity, and    (where    is the existing pool liquidity), the JIT searcher captures the lion's share of the trading fees generated by this specific swap. Empirical data suggests JIT attacks dilute existing LPs by an average of 85% for the attacked transaction.2
+3. Tx 3: The Burn (Back-run)
+The searcher burns the liquidity position and withdraws both the principal and the accrued fees. The searcher is now left with a different ratio of tokens than they started with, due to the swap execution changing the pool's composition.
+3.2 The Mathematics of Profitability
+The profitability of a JIT strategy is governed by a strict inequality. The strategy is viable if and only if:
+  
+
+Where:
+   *   : The gross revenue collected from the swap fee tier (e.g., 0.05% or 0.30% of the swap volume).
+   *   : The execution cost of the Mint and Burn transactions. This is a fixed cost, effectively setting a floor on the minimum viable swap size the searcher can attack.1
+   *   : The payment to the validator/builder. In a competitive market, this tends to bid away a significant portion of the profit margin.2
+   *    (Impermanent Loss): The loss in portfolio value due to the price shift caused by the swap.
+   *   : The cost of neutralizing the inventory imbalance (usually on a centralized exchange).
+Key Insight: The    component makes JIT a "Whale's Game." Uniswap Labs data indicates that JIT is rarely attempted on swaps smaller than $100,000 because the fixed gas costs of minting and burning liquidity would consume the entire fee revenue.9 Consequently, JIT liquidity is highly concentrated in top-tier pools like USDC/WETH (0.05%), where volume and trade sizes are sufficient to support the overhead.9
+3.3 Capital Intensity and Centralization
+The barriers to entry for JIT are exceptionally high, leading to extreme centralization.
+      * Liquidity Requirements: To successfully dilute passive LPs and capture the majority of fees, the searcher must provide liquidity that dwarfs the trade size. Research by the Imperial College London found that the average JIT attack requires liquidity 269 times greater than the swap volume.2 For a $1M swap, the searcher might need to flash-provision $269M in liquidity (often using flash loans or massive internal inventory).
+      * Bot Dominance: This capital intensity results in an oligopolistic market. A single address (0xa57...6CF) was found to be responsible for 92% of all JIT profit over a 20-month period.2 Fewer than 20 unique addresses have ever successfully executed JIT strategies at scale.9
+      * ROI Compression: Despite the massive capital deployed, the Return on Investment (ROI) is razor-thin—averaging just 0.007% per transaction.2 This characterizes JIT not as a high-margin alpha strategy, but as a high-volume, low-margin industrial operation dependent on economies of scale.
+3.4 Hedging and the CEX-DEX Bridge
+Unlike atomic arbitrage, which settles to a risk-neutral position within the same transaction, JIT liquidity leaves the searcher with inventory risk. If a searcher provides JIT liquidity for an ETH buy order, they end up selling ETH and buying USDC. To remain market-neutral, they must immediately rebuy that ETH elsewhere. This creates a tight coupling between on-chain DeFi liquidity and off-chain Centralized Exchange (CEX) liquidity. Searchers typically hedge their exposure on venues like Binance or Coinbase, where liquidity is deepest and fees are lowest.11 Thus, the efficiency of on-chain JIT is partly a function of off-chain market depth. If CEX spreads widen (e.g., during high volatility), the cost of hedging (  ) increases, making on-chain JIT less profitable and potentially reducing the protection it offers to DEX traders.
+4. The Intersection of JIT and MEV: Competitive Dynamics
+JIT does not exist in a vacuum. It competes directly with other MEV strategies for block space. The most notable competition is between JIT providers and Sandwich attackers.
+4.1 JIT vs. Sandwich: The Auction for the Victim
+Consider a large uninformed swap transaction pending in the mempool. This transaction is a prize to be won.
+      * The Sandwicher's Goal: Maximize the user's slippage. They want to push the price as much as possible to extract arbitrage value.
+      * The JIT Provider's Goal: Minimize the user's slippage. They want to deepen liquidity to capture the fee revenue.9
+These two strategies are mutually exclusive regarding the user's execution price. The block builder will include the bundle that generates the highest total payment (bribe) to the validator.
+      * If   , the sandwicher wins, and the user gets wrecked.
+      * If   , the JIT provider wins, and the user gets near-perfect execution.
+Theoretical Price Improvement Cap: Uniswap Labs research derives a theoretical bound for JIT competitiveness. Under efficient market assumptions, the price improvement JIT can offer is capped at twice the pool fee rate.9 For a 0.05% pool, JIT can theoretically improve the price by ~0.10% before the cost of liquidity provision exceeds the revenue. If the sandwicher can extract more than 0.10% in value, they will likely outbid the JIT provider.
+4.2 Layer 2 and the Spam Bot Problem
+The dynamics of MEV and JIT are shifting as volume migrates to Layer 2 (L2) rollups like Base and Arbitrum.
+         * Throughput and Spam: On Base, spam bots (a form of primitive MEV searcher) have been observed consuming over 50% of gas while paying less than 10% of fees.12 This congestion creates a noisy environment for JIT searchers.
+         * Latency Games: L2s often operate with centralized sequencers (currently) or faster block times (2 seconds on Optimism/Base vs. 12 seconds on Ethereum). This reduces the window for JIT calculation and bundle submission, requiring even lower-latency infrastructure.
+         * Lower Fees: The significantly lower gas fees on L2s potentially lower the floor for JIT viability. While mainnet JIT requires $100k+ swaps, L2 JIT might be viable for $5k-$10k swaps, potentially expanding the "JIT Paradox" to a wider tier of traders and liquidity providers.
+5. Ecosystem Impact & The 'JIT Paradox'
+While JIT liquidity appears beneficial for the specific trader involved (providing better execution), its systemic effects are contentious. Academic research has identified a phenomenon termed the "Paradox of Just-in-Time Liquidity," where the presence of active JIT providers can degrade the overall quality of the market.7
+5.1 Strategic Substitutes vs. Strategic Complements
+The core of the paradox lies in game theory. Liquidity providers can be categorized into two types:
+         1. Passive LPs: Provide liquidity over long periods, exposed to "toxic flow" (informed traders/arbitrageurs who trade only when the price is wrong). They rely on fees from uninformed flow to compensate for these losses.
+         2. JIT LPs: Active searchers who selectively provide liquidity only for large, uninformed swaps (high fee, low toxic risk).
+The Mechanism of Crowding Out: JIT LPs effectively "cherry-pick" the most profitable trades—the large, uninformed swaps that generate massive fees with minimal toxic risk. By swooping in, minting liquidity, and taking 85-90% of the fees for these specific trades, they starve passive LPs of their primary revenue source.13 Passive LPs are left with:
+         * Small trades (too small for JIT).
+         * Toxic arbitrage flow (which JIT avoids).
+The Equilibrium Shift (The Paradox):
+If passive LPs cannot earn enough from the "scraps" to cover their impermanent loss from toxic flow, they will rationalize their behavior by withdrawing liquidity from the pool entirely.
+         * Scenario A (Complements): If JIT improves prices so much that it attracts massive new volume to the DEX, the spillover might benefit passive LPs.
+         * Scenario B (Substitutes - The Paradox): If volume is inelastic, JIT simply cannibalizes existing revenue. As passive LPs withdraw, the "resting" liquidity of the pool decreases.
+         * The Result: The market becomes "hollow." A trader who is slightly too small to trigger JIT (e.g., a $50k trade) now faces a pool with significantly less passive liquidity, resulting in higher slippage than if JIT never existed.15 The market becomes bifurcated: excellent execution for whales (via JIT), and poor execution for retail (via hollowed pools).
+5.2 Quantifying the Impact
+         * Fee Dilution: Passive LPs lose ~85% of fee revenue on blocks where JIT occurs.2
+         * Trader Benefit: Traders targeted by JIT receive an average price improvement of 0.139%.2
+         * Prevalence: Despite the attention, JIT accounts for less than 1% of total liquidity provided on Uniswap V3, refuting the misconception that it dominates the protocol.9 However, its impact is disproportionately felt in the specific high-volume pools (USDC/ETH) where it is active.
+6. Future Outlook: Technological Responses and Market Evolution
+The tension between JIT's efficiency and its parasitic nature is driving the next wave of DeFi innovation. We are witnessing a divergence in how protocols handle this phenomenon: some seek to ban it, while others seek to formalize it.
+6.1 Uniswap V4 and the LiquidityPenaltyHook
+Uniswap V4 introduces "Hooks"—custom smart contracts that run at key points in the pool's execution lifecycle (e.g., beforeSwap, afterAddLiquidity).16 One of the primary use cases cited for Hooks is the mitigation of JIT via the LiquidityPenaltyHook.
+Technical Mechanism:
+The hook leverages the ability to store state about liquidity positions.
+         1. Tracking: When a user calls addLiquidity, the hook records the block.number and the owner address in a mapping.
+         2. Enforcement: When removeLiquidity is called, the hook calculates the delta:   .
+         3. Penalty: If    (e.g., 1 or 5 blocks), the hook triggers a penalty mechanism.
+            * It can confiscate the fees earned by that position.
+            * It can charge a "withdrawal tax" on the principal.
+            * These forfeited funds are typically "donated" back to the pool, effectively distributing them to the long-term passive LPs.18
+Implication: This mechanism destroys the risk-free nature of JIT. By forcing searchers to keep liquidity in the pool for multiple blocks, it exposes them to genuine market risk (price volatility) that cannot be perfectly hedged. This forces JIT providers to evolve from "fee snipers" into actual short-term market makers who must model inventory risk.19
+6.2 Intent-Centric Architectures: CoW Swap and UniswapX
+A parallel evolution is the shift from "transaction-based" trading to "intent-based" trading.
+In standard DeFi, a user submits a transaction ("Swap A for B") to the public mempool. This signal is what triggers JIT.
+In intent-based systems (CoW Swap, UniswapX), the user signs an intent ("I want to buy B with A at price X").
+            * Solvers as Market Makers: These intents are broadcast to a private network of "Solvers" (market makers). Solvers compete to fill the order.
+            * Batch Auctions & Coincidence of Wants: Solvers can match a user buying ETH with another user selling ETH (a Coincidence of Wants or CoW), effectively settling the trade peer-to-peer without ever touching the AMM liquidity pool.20
+            * JIT Neutralization: Because the trade is matched off-chain or via private inventory, there is no pending transaction in the public mempool for a JIT bot to attack. The "JIT Paradox" is resolved by moving the whale volume away from the passive AMM entirely. The AMM becomes a price oracle and a fallback for "toxic" flow, while "clean" flow is internalized by Solvers.21
+6.3 SUAVE: Privacy-Aware JIT and TEEs
+Flashbots' SUAVE (Single Unified Auction for Value Expression) proposes a third path: distinct from banning JIT (Hooks) or avoiding it (Intents), SUAVE aims to democratize and regulate it through privacy.3
+The SUAVE Architecture:
+            * Confidential Compute Requests (CCRs): Users submit transactions that are encrypted. The data is only visible inside a Trusted Execution Environment (TEE), such as Intel SGX.24
+            * Universal Preference Environment: A decentralized mempool where users can express complex preferences.
+            * Privacy-Aware JIT: A user could submit a preference: "I authorize JIT liquidity for my trade IF and ONLY IF it improves my price by >0.1%."
+            * Blind Bidding: Searchers (Executors) bid to provide this liquidity without seeing the full trade details until the execution is guaranteed.
+This transforms JIT from an adversarial "attack" into a negotiated "service." The user explicitly invites JIT to get better execution, but the auction mechanism ensures the JIT provider pays for the privilege, and the privacy guarantees prevent predatory sandwiching.25
+7. Strategic Conclusions
+The emergence of JIT liquidity is a symptom of the maturation of DeFi markets. It signals the end of the era of "lazy" passive liquidity dominance and the rise of professionalized, algorithmic market making.
+7.1 Key Takeaways
+            1. JIT is a Whale's Game: With a 269x liquidity requirement and high fixed costs, JIT is restricted to sophisticated actors. It is not a retail strategy.
+            2. The Paradox is Real: While JIT benefits individual large traders, it likely harms the sustainability of passive liquidity pools by increasing the "toxicity" of the remaining flow.
+            3. Hooks are the Regulator: Uniswap V4's LiquidityPenaltyHook represents a protocol-level intervention to restore the balance between active and passive LPs.
+            4. Intents are the Future: The migration of large flow to intent-based systems (CoW Swap) suggests a future where AMMs are reserves of last resort, while primary price discovery and execution for institutional volume happens in Solver-mediated auctions.
+7.2 Final Recommendation
+For liquidity providers, the era of "set and forget" is ending. LPs must either migrate to managed vaults that employ JIT-resistant strategies (or conduct JIT themselves) or accept lower yields. For traders, specifically those executing large volumes, utilizing intent-based interfaces or private RPCs (Flashbots Protect) is no longer optional but necessary to capture the surplus that would otherwise be extracted by the MEV supply chain. The future of DeFi liquidity will be defined by the tension between the transparency required for trust and the privacy required for efficiency—a balance that architectures like SUAVE and Uniswap V4 are racing to solve.
+8. Detailed Ecosystem Data and Metrics (2024-2025 Context)
+The following data clusters synthesize the current state of the JIT landscape, drawing from recent empirical studies and on-chain analytics.
+8.1 JIT Profitability and Volume
+
+
+Metric
+	Value
+	Implication
+	Avg. Liquidity Multiplier
+	269x swap volume
+	Extreme capital intensity barrier to entry.2
+	Avg. ROI per Attack
+	0.007%
+	Requires high-frequency, industrial-scale volume to be viable.
+	Fee Dilution (Victim Block)
+	~85%
+	Passive LPs are effectively effectively wiped out for that specific block.
+	Dominant Bot Share
+	92% (Bot 0xa57...)
+	Highly centralized risk; single point of failure/censorship.
+	Total Liquidity Contribution
+	<1% of Total V3 Liquidity
+	JIT is a niche sniper strategy, not the dominant liquidity source.9
+	Avg. Price Improvement
+	0.139% (13.9 bps)
+	Tangible benefit for the specific trader targeted.2
+	8.2 The Layer 2 Shift (Base & Arbitrum)
+Recent data from 2024-2025 indicates a shift in MEV behaviors on L2s:
+            * Base: Spam bots consume >50% of gas but pay <10% of fees. This congestion complicates the precise timing required for JIT.12
+            * Concentration: On Base, just two searchers are responsible for >80% of spam/MEV activity, mirroring the centralization seen in Mainnet JIT.12
+            * Outlook: As "Based Rollups" (sequenced by L1) emerge, L2 JIT dynamics will likely converge with L1, re-introducing the PBS supply chain to these environments.
+This quantitative backdrop frames the narrative: JIT is a highly optimized, centralized, and distinct mechanism that improves localized efficiency at the cost of systemic robustness—a classic market microstructure dilemma that the next generation of DeFi protocols must resolve.
+Works cited
+            1. BIS Working Papers No 1227: Decentralised dealers? Examining liquidity provision in decentralised exchanges, accessed February 13, 2026, https://bis.org/publ/work1227.pdf
+            2. Demystifying Just-in-Time (JIT) Liquidity Attacks on Uniswap V3 - Spiral, accessed February 13, 2026, https://spiral.imperial.ac.uk/server/api/core/bitstreams/381ecaee-f928-4da1-a18e-41dacaa43001/content
+            3. Flashbots, accessed February 13, 2026, https://www.flashbots.net/
+            4. MEV: A 2025 guide to Maximal Extractable Value in crypto, accessed February 13, 2026, https://info.arkm.com/research/beginners-guide-to-mev
+            5. Flashbots Docs: Welcome to Flashbots, accessed February 13, 2026, https://docs.flashbots.net/
+            6. Maximal Extractable Value Implications for crypto markets, accessed February 13, 2026, https://www.esma.europa.eu/sites/default/files/2025-07/ESMA50-481369926-29744_Maximal_Extractable_Value_Implications_for_crypto_markets.pdf
+            7. [2311.18164] The Paradox Of Just-in-Time Liquidity in Decentralized Exchanges: More Providers Can Sometimes Mean Less Liquidity - arXiv, accessed February 13, 2026, https://arxiv.org/abs/2311.18164
+            8. All You Need to Know About Sandwich Attacks & JIT on Uniswap | by Johnny Chuang, accessed February 13, 2026, https://medium.com/diamond-protocol/all-you-need-to-know-about-sandwich-attacks-jit-on-uniswap-e31076435788
+            9. Just-In-Time Liquidity on the Uniswap Protocol, accessed February 13, 2026, https://blog.uniswap.org/jit-liquidity
+            10. BIS Working Papers No 1227: Decentralised dealers? Examining liquidity provision in decentralised exchanges, accessed February 13, 2026, https://www.bis.org/publ/work1227.pdf
+            11. Conceptualizing Uniswap v3 LP profit and loss | by Atis E - Medium, accessed February 13, 2026, https://atise.medium.com/conceptualizing-uniswap-v3-lp-profit-and-loss-ecbae6e09644
+            12. MEV and the Limits of Scaling | Flashbots Writings, accessed February 13, 2026, https://writings.flashbots.net/mev-and-the-limits-of-scaling
+            13. The Paradox Of Just-in-Time Liquidity in Decentralized Exchanges: More Providers Can Sometimes Mean Less Liquidity, accessed February 13, 2026, https://ideas.repec.org/p/arx/papers/2311.18164.html
+            14. The Paradox of Just-in-Time Liquidity in Decentralized Exchanges: More Providers Can Lead to Less Liquidity The authors gratefully acknowledge the support of Ripple through the University Blockchain Research Initiative and of the Stellar Development Foundation. - arXiv, accessed February 13, 2026, https://arxiv.org/html/2311.18164v2
+            15. The Paradox of Just-in-Time Liquidity in Decentralized Exchanges: More Providers Can Lead to Less Liquidity - arXiv, accessed February 13, 2026, https://arxiv.org/pdf/2311.18164
+            16. Uniswap v4 Architecture & Security Analysis: Hooks, Singleton, Flash Accounting - Zealynx, accessed February 13, 2026, https://www.zealynx.io/blogs/uniswap-v4
+            17. Overview - Uniswap Docs, accessed February 13, 2026, https://docs.uniswap.org/contracts/v4/overview
+            18. OpenZeppelin Uniswap Hooks v1.1.0 RC 2 Audit, accessed February 13, 2026, https://www.openzeppelin.com/news/openzeppelin-uniswap-hooks-v1.1.0-rc-2-audit
+            19. Uniswap v4 Explained Simply: Key Features, Hooks & Architecture - Three Sigma, accessed February 13, 2026, https://threesigma.xyz/blog/defi/uniswap-v4-features-dynamic-fees-hooks-gas-saving
+            20. Understanding Crypto Intents: The Future of Your DeFi Trades - CoW DAO, accessed February 13, 2026, https://cow.fi/learn/understanding-crypto-intents-the-future-of-your-de-fi-trades
+            21. Intents | CoW Protocol Documentation, accessed February 13, 2026, https://docs.cow.fi/cow-protocol/concepts/introduction/intents
+            22. What's the Best Intent Protocol? A Complete Guide to Intent-Based Trading in 2025 | by Evin Kim | Medium, accessed February 13, 2026, https://medium.com/@evinkim/best-intent-protocol-2025-complete-guide-to-intent-based-trading-cbfe3b5135b9
+            23. flashbots/suave-specs: ☀️ SUAVE Alpha Protocol Specifications - GitHub, accessed February 13, 2026, https://github.com/flashbots/suave-specs
+            24. A Technical Analysis of Confidential Computing, accessed February 13, 2026, https://confidentialcomputing.io/wp-content/uploads/sites/10/2023/03/CCC-A-Technical-Analysis-of-Confidential-Computing-v1.3_unlocked.pdf
+            25. Introduction to SUAVE & MEVM. Auther: tomo | by Titania Research | Medium, accessed February 13, 2026, https://medium.com/@titania-research/introduction-to-suave-mevm-99ef0251b1d1
