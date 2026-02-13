@@ -17,6 +17,7 @@ const JITParadox = lazy(() => import('./components/sections/JITParadox'));
 const RealWorldStrategies = lazy(() => import('./components/sections/RealWorldStrategies'));
 const FutureOutlook = lazy(() => import('./components/sections/FutureOutlook'));
 const SecurityPractices = lazy(() => import('./components/sections/SecurityPractices'));
+const KnowledgeQuiz = lazy(() => import('./components/sections/KnowledgeQuiz'));
 
 function SectionFallback() {
   return (
@@ -79,6 +80,10 @@ export default function App() {
         <Divider />
         <Suspense fallback={<SectionFallback />}>
           <SecurityPractices />
+        </Suspense>
+        <Divider />
+        <Suspense fallback={<SectionFallback />}>
+          <KnowledgeQuiz />
         </Suspense>
       </main>
       <Footer />

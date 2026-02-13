@@ -12,6 +12,7 @@ export const SECTIONS = [
   { id: 'strategies', label: 'Strategies' },
   { id: 'future', label: 'Future' },
   { id: 'security', label: 'Security' },
+  { id: 'quiz', label: 'Quiz' },
 ];
 
 export const COLORS = {
