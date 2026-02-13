@@ -1,6 +1,30 @@
 import { useState, useMemo } from 'react';
 import { motion } from 'framer-motion';
 
+function BarChart({ bars, maxVal, color, label }) {
+  return (
+    <div>
+      <div className="text-xs text-defi-muted mb-2 text-center">{label}</div>
+      <div className="flex items-end gap-[2px] h-32 bg-defi-navy/50 rounded-lg p-2">
+        {bars.map((val, i) => (
+          <motion.div
+            key={i}
+            className="flex-1 rounded-t-sm"
+            style={{ backgroundColor: val > 0 ? color : 'transparent' }}
+            animate={{ height: `${maxVal > 0 ? (val / maxVal) * 100 : 0}%` }}
+            transition={{ duration: 0.3 }}
+          />
+        ))}
+      </div>
+      <div className="flex justify-between text-[10px] text-defi-muted mt-1 px-1">
+        <span>Low Price</span>
+        <span>Current Price</span>
+        <span>High Price</span>
+      </div>
+    </div>
+  );
+}
+
 export default function LiquidityCurveViz() {
   const [concentration, setConcentration] = useState(50); // 0 = uniform (V2), 100 = max concentrated (V3)
 
@@ -34,28 +58,6 @@ export default function LiquidityCurveViz() {
 
     return { v2Bars, v3Bars, v2Max, v3Max, efficiencyV2, efficiencyV3, multiplier };
   }, [concentration]);
-
-  const BarChart = ({ bars, maxVal, color, label }) => (
-    <div>
-      <div className="text-xs text-defi-muted mb-2 text-center">{label}</div>
-      <div className="flex items-end gap-[2px] h-32 bg-defi-navy/50 rounded-lg p-2">
-        {bars.map((val, i) => (
-          <motion.div
-            key={i}
-            className="flex-1 rounded-t-sm"
-            style={{ backgroundColor: val > 0 ? color : 'transparent' }}
-            animate={{ height: `${maxVal > 0 ? (val / maxVal) * 100 : 0}%` }}
-            transition={{ duration: 0.3 }}
-          />
-        ))}
-      </div>
-      <div className="flex justify-between text-[10px] text-defi-muted mt-1 px-1">
-        <span>Low Price</span>
-        <span>Current Price</span>
-        <span>High Price</span>
-      </div>
-    </div>
-  );
 
   return (
     <div className="space-y-6">

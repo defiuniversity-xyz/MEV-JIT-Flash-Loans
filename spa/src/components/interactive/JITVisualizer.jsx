@@ -4,72 +4,56 @@ import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { jitSteps } from '../../data/mevJitContent';
 import { useKeyboardNav } from '../../hooks/useKeyboardNav';
 
+function PieChart({ passive, jit }) {
+  const total = passive + jit;
+  const passivePct = total > 0 ? (passive / total) * 100 : 100;
+  const jitPct = total > 0 ? (jit / total) * 100 : 0;
+  const radius = 45;
+  const circumference = 2 * Math.PI * radius;
+  const passiveLen = (passivePct / 100) * circumference;
+  const jitLen = (jitPct / 100) * circumference;
+
+  return (
+    <div className="flex flex-col items-center gap-3">
+      <svg width="120" height="120" viewBox="0 0 120 120">
+        <circle cx="60" cy="60" r={radius} fill="none" stroke="#334155" strokeWidth="10" />
+        <motion.circle
+          cx="60" cy="60" r={radius} fill="none" stroke="#3b82f6" strokeWidth="10"
+          strokeDasharray={`${passiveLen} ${circumference}`} strokeDashoffset={0}
+          transform="rotate(-90 60 60)"
+          animate={{ strokeDasharray: `${passiveLen} ${circumference}` }}
+          transition={{ duration: 0.5 }}
+        />
+        <motion.circle
+          cx="60" cy="60" r={radius} fill="none" stroke="#f59e0b" strokeWidth="10"
+          strokeDasharray={`${jitLen} ${circumference}`} strokeDashoffset={-passiveLen}
+          transform="rotate(-90 60 60)"
+          animate={{ strokeDasharray: `${jitLen} ${circumference}`, strokeDashoffset: -passiveLen }}
+          transition={{ duration: 0.5 }}
+        />
+        <text x="60" y="56" textAnchor="middle" fill="white" fontSize="14" fontWeight="bold">
+          {passivePct.toFixed(0)}%
+        </text>
+        <text x="60" y="72" textAnchor="middle" fill="#94a3b8" fontSize="9">Passive LP</text>
+      </svg>
+      <div className="flex gap-4 text-xs">
+        <div className="flex items-center gap-1.5">
+          <div className="w-3 h-3 rounded-full bg-defi-blue" />
+          <span className="text-defi-muted">Passive LP: {passive}%</span>
+        </div>
+        <div className="flex items-center gap-1.5">
+          <div className="w-3 h-3 rounded-full bg-defi-amber" />
+          <span className="text-defi-muted">JIT Bot: {jit}%</span>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function JITVisualizer() {
   const [currentStep, setCurrentStep] = useState(0);
   useKeyboardNav(currentStep, setCurrentStep, jitSteps.length - 1);
   const step = jitSteps[currentStep];
-
-  const PieChart = ({ passive, jit }) => {
-    const total = passive + jit;
-    const passivePct = total > 0 ? (passive / total) * 100 : 100;
-    const jitPct = total > 0 ? (jit / total) * 100 : 0;
-    // SVG pie using stroke-dasharray
-    const radius = 45;
-    const circumference = 2 * Math.PI * radius;
-    const passiveLen = (passivePct / 100) * circumference;
-    const jitLen = (jitPct / 100) * circumference;
-
-    return (
-      <div className="flex flex-col items-center gap-3">
-        <svg width="120" height="120" viewBox="0 0 120 120">
-          {/* Background */}
-          <circle cx="60" cy="60" r={radius} fill="none" stroke="#334155" strokeWidth="10" />
-          {/* Passive LP */}
-          <motion.circle
-            cx="60" cy="60" r={radius} fill="none"
-            stroke="#3b82f6"
-            strokeWidth="10"
-            strokeDasharray={`${passiveLen} ${circumference}`}
-            strokeDashoffset={0}
-            transform="rotate(-90 60 60)"
-            animate={{ strokeDasharray: `${passiveLen} ${circumference}` }}
-            transition={{ duration: 0.5 }}
-          />
-          {/* JIT LP */}
-          <motion.circle
-            cx="60" cy="60" r={radius} fill="none"
-            stroke="#f59e0b"
-            strokeWidth="10"
-            strokeDasharray={`${jitLen} ${circumference}`}
-            strokeDashoffset={-passiveLen}
-            transform="rotate(-90 60 60)"
-            animate={{
-              strokeDasharray: `${jitLen} ${circumference}`,
-              strokeDashoffset: -passiveLen,
-            }}
-            transition={{ duration: 0.5 }}
-          />
-          {/* Center text */}
-          <text x="60" y="56" textAnchor="middle" fill="white" fontSize="14" fontWeight="bold">
-            {passivePct.toFixed(0)}%
-          </text>
-          <text x="60" y="72" textAnchor="middle" fill="#94a3b8" fontSize="9">
-            Passive LP
-          </text>
-        </svg>
-        <div className="flex gap-4 text-xs">
-          <div className="flex items-center gap-1.5">
-            <div className="w-3 h-3 rounded-full bg-defi-blue" />
-            <span className="text-defi-muted">Passive LP: {passive}%</span>
-          </div>
-          <div className="flex items-center gap-1.5">
-            <div className="w-3 h-3 rounded-full bg-defi-amber" />
-            <span className="text-defi-muted">JIT Bot: {jit}%</span>
-          </div>
-        </div>
-      </div>
-    );
-  };
 
   return (
     <div className="space-y-6">

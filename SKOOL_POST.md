@@ -2,7 +2,7 @@
 
 Most people learn DeFi by reading threads or watching YouTube. That's fine for the basics. But when you're trying to actually understand *how* a flash loan executes inside the EVM, or *why* JIT liquidity is slowly hollowing out Uniswap V3 pools — you need to **see it happen**.
 
-So I built **DeFi Academy** — a single-page interactive web app that turns dense DeFi research into hands-on simulations you can click through, toggle, and experiment with.
+So I built **DeFi Academy** — a single-page interactive web app that turns dense DeFi research into hands-on simulations you can click through, toggle, and experiment with. It ends with a 10-question knowledge quiz so you can test what you learned.
 
 No wallet connection. No sign-up. Just scroll and learn.
 
@@ -10,7 +10,7 @@ No wallet connection. No sign-up. Just scroll and learn.
 
 ## What It Covers
 
-The app walks you through a structured 13-section curriculum — starting from the fundamentals and building up to the strategies that professional searchers and market makers actually use today.
+The app walks you through a structured 14-section curriculum — starting from the fundamentals and building up to the strategies that professional searchers and market makers actually use today, ending with a quiz to test your understanding.
 
 ### Flash Loans (Sections 1–6)
 
@@ -57,7 +57,7 @@ DeFi is getting more complex every cycle. The gap between "I know what a flash l
 ## Tech Details (For the Builders)
 
 - React 18 + Vite + Tailwind CSS + Framer Motion
-- 12 interactive elements, 13 sections, zero backend
+- 16+ interactive elements, 14 sections, zero backend
 - Dark-themed with scroll-triggered animations
 - Code-split with lazy loading (111KB initial gzip)
 - All content sourced from peer-reviewed DeFi research (2024–2026)
@@ -66,6 +66,8 @@ DeFi is getting more complex every cycle. The gap between "I know what a flash l
 
 **The app is live on the repo.** Clone it, run `npm install && npm run dev` inside the `spa/` folder, and start exploring.
 
-Drop a comment if you want me to add any specific strategies or protocols to the simulator. Thinking about adding a liquidation cascade visualizer next.
+There's also a **10-question knowledge quiz** at the end that tests everything from EVM atomicity to TWAP oracle security. Multiple choice with instant feedback, explanations, and a final grade.
+
+Drop a comment if you want me to add any specific strategies or protocols to the simulator.
 
 LFG 🔥

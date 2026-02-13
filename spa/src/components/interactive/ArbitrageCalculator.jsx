@@ -2,26 +2,8 @@ import { useState, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { Calculator, Check, X, TrendingUp, TrendingDown } from 'lucide-react';
 
-export default function ArbitrageCalculator() {
-  const [borrowAmount, setBorrowAmount] = useState(2000000);
-  const [priceA, setPriceA] = useState(3000);
-  const [priceB, setPriceB] = useState(3020);
-  const [flashFee, setFlashFee] = useState(0.05);
-  const [gasCost, setGasCost] = useState(150);
-
-  const results = useMemo(() => {
-    const fee = borrowAmount * (flashFee / 100);
-    const tokensReceived = borrowAmount / priceA;
-    const grossProceeds = tokensReceived * priceB;
-    const netProfit = grossProceeds - borrowAmount - fee - gasCost;
-    const profitable = netProfit > 0;
-    const spreadPct = ((priceB - priceA) / priceA) * 100;
-    const roi = (netProfit / borrowAmount) * 100;
-
-    return { fee, tokensReceived, grossProceeds, netProfit, profitable, spreadPct, roi };
-  }, [borrowAmount, priceA, priceB, flashFee, gasCost]);
-
-  const InputField = ({ label, value, onChange, prefix = '', suffix = '', min = 0 }) => (
+function InputField({ label, value, onChange, prefix = '', suffix = '', min = 0 }) {
+  return (
     <div>
       <label className="block text-xs text-defi-muted mb-1.5">{label}</label>
       <div className="relative">
@@ -41,6 +23,26 @@ export default function ArbitrageCalculator() {
       </div>
     </div>
   );
+}
+
+export default function ArbitrageCalculator() {
+  const [borrowAmount, setBorrowAmount] = useState(2000000);
+  const [priceA, setPriceA] = useState(3000);
+  const [priceB, setPriceB] = useState(3020);
+  const [flashFee, setFlashFee] = useState(0.05);
+  const [gasCost, setGasCost] = useState(150);
+
+  const results = useMemo(() => {
+    const fee = borrowAmount * (flashFee / 100);
+    const tokensReceived = borrowAmount / priceA;
+    const grossProceeds = tokensReceived * priceB;
+    const netProfit = grossProceeds - borrowAmount - fee - gasCost;
+    const profitable = netProfit > 0;
+    const spreadPct = ((priceB - priceA) / priceA) * 100;
+    const roi = (netProfit / borrowAmount) * 100;
+
+    return { fee, tokensReceived, grossProceeds, netProfit, profitable, spreadPct, roi };
+  }, [borrowAmount, priceA, priceB, flashFee, gasCost]);
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">

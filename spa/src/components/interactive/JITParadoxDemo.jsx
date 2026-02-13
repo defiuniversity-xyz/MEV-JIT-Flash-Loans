@@ -2,11 +2,8 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { jitParadoxData } from '../../data/mevJitContent';
 
-export default function JITParadoxDemo() {
-  const [jitActive, setJitActive] = useState(true);
-  const data = jitActive ? jitParadoxData.withJIT : jitParadoxData.withoutJIT;
-
-  const MetricBar = ({ label, value, max, color, suffix = '%' }) => (
+function MetricBar({ label, value, max, color, suffix = '%' }) {
+  return (
     <div>
       <div className="flex justify-between text-xs mb-1">
         <span className="text-defi-muted">{label}</span>
@@ -22,6 +19,11 @@ export default function JITParadoxDemo() {
       </div>
     </div>
   );
+}
+
+export default function JITParadoxDemo() {
+  const [jitActive, setJitActive] = useState(true);
+  const data = jitActive ? jitParadoxData.withJIT : jitParadoxData.withoutJIT;
 
   return (
     <div className="space-y-6">

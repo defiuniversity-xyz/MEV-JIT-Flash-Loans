@@ -3,7 +3,7 @@ import JITVisualizer from '../interactive/JITVisualizer';
 import Tooltip from '../layout/Tooltip';
 import KeyTakeaways from '../layout/KeyTakeaways';
 import AnimatedCounter from '../layout/AnimatedCounter';
-import { jitMetrics } from '../../data/mevJitContent';
+// jitMetrics data is now inlined in the animated counters below
 import { motion } from 'framer-motion';
 import { Crosshair } from 'lucide-react';
 

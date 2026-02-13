@@ -64,8 +64,8 @@ export default function HeroSection() {
         >
           {[
             { end: 2, prefix: '$', suffix: 'T+', label: 'Flash Loan Volume (2024)', decimals: 0 },
-            { end: 13, suffix: '', label: 'Interactive Sections', decimals: 0 },
-            { end: 12, suffix: '+', label: 'Hands-On Simulations', decimals: 0 },
+            { end: 14, suffix: '', label: 'Interactive Sections', decimals: 0 },
+            { end: 16, suffix: '+', label: 'Hands-On Simulations', decimals: 0 },
           ].map((stat, i) => (
             <div key={i} className="text-center">
               <AnimatedCounter

@@ -26,10 +26,10 @@ npm run preview    # Preview production build
 
 No backend required — all simulations run client-side.
 
-## Curriculum (13 Sections)
+## Curriculum (14 Sections)
 
 ### Flash Loans (Sections 1–6)
-1. **Hero** — Animated stat counters ($2T+, 13 sections, 12+ simulations)
+1. **Hero** — Animated stat counters ($2T+, 14 sections, 16+ simulations)
 2. **Atomicity** — Interactive EVM state visualizer (success vs. revert toggle)
 3. **Flash Loan Mechanics** — 5-step lifecycle stepper with entity tracking
 4. **Use Cases** — Tabbed interface with arbitrage calculator + flow diagrams for collateral swap, self-liquidation, refinancing
@@ -45,7 +45,10 @@ No backend required — all simulations run client-side.
 12. **Future** — Uniswap V4 Hooks, Intent-based architectures, SUAVE/TEEs
 13. **Security** — Interactive checklist + EIP-3156 Solidity code with syntax highlighting
 
-## Interactive Elements (15+)
+### Assessment (Section 14)
+14. **Knowledge Quiz** — 10 multiple-choice questions with instant feedback, explanations, score tracking, and grade card
+
+## Interactive Elements (16+)
 
 | Element | Type | Key Concept |
 |---------|------|-------------|
@@ -64,19 +67,20 @@ No backend required — all simulations run client-side.
 | JIT Paradox Demo | Toggle + dual panels | Systemic impact |
 | Sandwich Attack Sim | 4-step + price chart | Sandwich mechanics |
 | Cross-Chain Gap Viz | Problem/solution toggle | Cross-chain limitation |
+| Knowledge Quiz | 10-question MCQ | Full curriculum assessment |
 
 ## UX Features
 
 - **Dark theme** — Deep navy (#0f172a) with glassmorphism cards
 - **Scroll animations** — Sections fade in on scroll via Intersection Observer
-- **Section progress tracker** — Navbar shows visited sections (X/13) with green dots
+- **Section progress tracker** — Navbar shows visited sections (X/14) with green dots
 - **Back-to-top button** — Floating button appears after scrolling
 - **Gradient section dividers** — Subtle separators between all 13 sections
 - **Keyboard navigation** — Arrow keys step through all 4 stepper components
 - **DeFi glossary tooltips** — Hover on jargon (EVM, DEX, Mempool, etc.) for definitions
 - **Key Takeaways** — Summary boxes on all 8 teaching sections
 - **Animated counters** — Stats count up on scroll ($2T+, 269×, 85%, etc.)
-- **Code splitting** — React.lazy + Suspense for 13 lazy-loaded chunks
+- **Code splitting** — React.lazy + Suspense for 14 lazy-loaded chunks
 - **Responsive** — Mobile hamburger menu, stacked layouts on small screens
 - **Accessible** — Focus-visible outlines, ARIA labels, aria-expanded, aria-live
 - **Social ready** — Open Graph + Twitter Card meta tags
@@ -85,8 +89,8 @@ No backend required — all simulations run client-side.
 
 ```
 Initial JS:  355 KB (gzip: 113 KB)
-CSS:          37 KB (gzip:   7 KB)
-+ 13 lazy-loaded section chunks
+CSS:          38 KB (gzip:   7 KB)
++ 14 lazy-loaded section chunks
 ```
 
 ## Project Structure
