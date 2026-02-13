@@ -16,7 +16,7 @@ import SecurityPractices from './components/sections/SecurityPractices';
 
 export default function App() {
   return (
-    <div className="min-h-screen bg-defi-navy text-defi-text">
+    <div className="min-h-screen bg-defi-navy text-defi-text overflow-x-hidden">
       <Navbar />
       <main>
         <HeroSection />
