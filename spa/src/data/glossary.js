@@ -1,0 +1,20 @@
+/** DeFi glossary — used for inline tooltips throughout the app */
+export const glossary = {
+  EVM: 'Ethereum Virtual Machine — the computation engine that executes smart contract code on Ethereum and compatible blockchains.',
+  AMM: 'Automated Market Maker — a protocol that uses mathematical formulas (like x*y=k) to price assets instead of an order book. Uniswap, Curve, and Balancer are AMMs.',
+  DEX: 'Decentralized Exchange — a peer-to-peer marketplace for trading crypto tokens directly from your wallet, without a central intermediary.',
+  LP: 'Liquidity Provider — a user who deposits tokens into an AMM pool to earn trading fees. LPs take on impermanent loss risk.',
+  TWAP: 'Time-Weighted Average Price — the average price of an asset over a set number of blocks. Much harder to manipulate than spot price because an attacker would need to sustain manipulation across many blocks.',
+  slippage: 'The difference between the expected price of a trade and the actual execution price. Caused by insufficient liquidity or price movement during transaction confirmation.',
+  impermanentLoss: 'The unrealized loss an LP experiences when the price ratio of deposited tokens diverges from the deposit ratio. Called "impermanent" because it reverses if prices return to the original ratio.',
+  gas: 'The fee paid to execute transactions on Ethereum. Measured in "gwei" (billionths of ETH). Complex flash loan transactions can cost $50–$500+ in gas.',
+  mempool: 'The memory pool — a waiting area where unconfirmed transactions sit before being included in a block. Visible to all network participants, making it a hunting ground for MEV searchers.',
+  ticks: 'Discrete price points in Uniswap V3 defined by the formula p(i) = 1.0001^i. LPs concentrate capital within specific tick ranges instead of across all prices.',
+  passiveLPs: 'Liquidity Providers who deposit assets into AMM pools over long periods without actively managing their positions. They earn fees but are exposed to impermanent loss and toxic flow.',
+  oracle: 'A data feed that brings external information (like asset prices) on-chain. Flash loan attacks often target protocols using simple spot-price oracles instead of TWAP or Chainlink.',
+  LTV: 'Loan-to-Value ratio — the percentage of collateral value that has been borrowed against. When LTV exceeds the liquidation threshold, the position can be liquidated.',
+  flashLoanFee: 'The fee charged by the lending protocol for a flash loan. Aave V3 charges 0.05%, Balancer charges 0%, and Uniswap charges the pool trading fee (0.05%–1%).',
+  PBS: 'Proposer-Builder Separation — the architecture where block building (transaction ordering) is separated from block proposing (committing to the chain). Implemented by Flashbots to professionalize MEV extraction.',
+  atomicity: 'The property that a transaction either fully completes or fully reverts — there is no partial execution. This is what makes flash loans possible.',
+  searcher: 'An algorithmic trader who scans the mempool for MEV opportunities like arbitrage, sandwich attacks, and JIT liquidity. They submit transaction "bundles" to block builders.',
+};

@@ -18,6 +18,7 @@
 /* Base Styles */
 html {
   scroll-behavior: smooth;
+  scroll-padding-top: 4rem;
 }
 
 body {
@@ -71,6 +72,18 @@ body {
 .code-function { color: #d2a8ff; }
 .code-type { color: #79c0ff; }
 .code-number { color: #79c0ff; }
+
+/* Focus styles for accessibility */
+*:focus-visible {
+  outline: 2px solid var(--color-defi-blue);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+button:focus-visible {
+  outline: 2px solid var(--color-defi-blue);
+  outline-offset: 2px;
+}
 
 /* Glow effects */
 .glow-blue {

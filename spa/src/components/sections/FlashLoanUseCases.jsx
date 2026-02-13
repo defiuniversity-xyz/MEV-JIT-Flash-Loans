@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { TrendingUp, Repeat, Shield, RefreshCw } from 'lucide-react';
 import SectionWrapper from '../layout/SectionWrapper';
 import ArbitrageCalculator from '../interactive/ArbitrageCalculator';
+import Tooltip from '../layout/Tooltip';
 import { useCases } from '../../data/flashLoanContent';
 
 const ICONS = { TrendingUp, Repeat, Shield, RefreshCw };
@@ -24,6 +25,11 @@ export default function FlashLoanUseCases() {
         <p className="text-defi-muted max-w-2xl mx-auto">
           Flash loans serve as a capital efficiency multiplier, enabling the market
           to self-correct without requiring intermediaries to hoard idle capital.
+          From{' '}
+          <Tooltip term="DEX" definition="Decentralized Exchange — a peer-to-peer marketplace for trading crypto tokens directly from your wallet, without a central intermediary.">DEX</Tooltip>{' '}
+          arbitrage to{' '}
+          <Tooltip term="LTV" definition="Loan-to-Value ratio — the percentage of collateral value that has been borrowed against. When LTV exceeds the liquidation threshold, the position can be liquidated.">LTV</Tooltip>{' '}
+          management.
         </p>
       </div>
 
@@ -89,13 +95,46 @@ export default function FlashLoanUseCases() {
             </div>
           </div>
 
-          {/* Show calculator only for arbitrage */}
+          {/* Show calculator for arbitrage */}
           {activeTab === 'arbitrage' && (
             <div>
               <h4 className="text-lg font-semibold text-white mb-4 text-center">
                 💰 Interactive Arbitrage Calculator
               </h4>
               <ArbitrageCalculator />
+            </div>
+          )}
+
+          {/* Show flow steps for other use cases */}
+          {activeCase.flowSteps && (
+            <div className="glass rounded-2xl p-6 sm:p-8">
+              <h4 className="text-sm font-semibold text-white mb-5">Transaction Flow</h4>
+              <div className="relative">
+                {/* Vertical line */}
+                <div className="absolute left-[18px] top-3 bottom-3 w-px" style={{ backgroundColor: activeCase.color + '40' }} />
+                <div className="space-y-4">
+                  {activeCase.flowSteps.map((step, i) => (
+                    <motion.div
+                      key={i}
+                      initial={{ opacity: 0, x: -10 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: i * 0.08 }}
+                      className="flex items-start gap-3 relative"
+                    >
+                      <div
+                        className="w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0 text-base z-10"
+                        style={{ backgroundColor: activeCase.color + '20' }}
+                      >
+                        {step.icon}
+                      </div>
+                      <div className="pt-1">
+                        <div className="text-sm font-medium text-white">{step.label}</div>
+                        <div className="text-xs text-defi-muted">{step.detail}</div>
+                      </div>
+                    </motion.div>
+                  ))}
+                </div>
+              </div>
             </div>
           )}
         </motion.div>

@@ -1,5 +1,6 @@
 import SectionWrapper from '../layout/SectionWrapper';
 import FlashLoanStepper from '../interactive/FlashLoanStepper';
+import Tooltip from '../layout/Tooltip';
 import { Zap } from 'lucide-react';
 
 export default function FlashLoanMechanics() {
@@ -15,7 +16,9 @@ export default function FlashLoanMechanics() {
         <p className="text-defi-muted max-w-2xl mx-auto">
           A flash loan executes in 5 stages within a single transaction block.
           Step through each phase to see how funds flow between the lending pool,
-          your contract, and DeFi protocols.
+          your contract, and{' '}
+          <Tooltip term="DeFi" definition="Decentralized Finance — financial services (lending, trading, insurance) built on blockchains using smart contracts instead of banks and brokers.">DeFi</Tooltip>{' '}
+          protocols.
         </p>
       </div>
 

@@ -88,6 +88,15 @@ export const useCases = [
       result: 'Same $500K debt, but now backed by ETH instead of WBTC',
       benefit: 'Avoid liquidation if you expect BTC to drop',
     },
+    flowSteps: [
+      { label: 'Flash Borrow', detail: 'Borrow $500K USDC from Aave', icon: '⚡' },
+      { label: 'Repay Debt', detail: 'Use borrowed USDC to pay off $500K loan', icon: '💰' },
+      { label: 'Unlock Collateral', detail: 'Withdraw $1M WBTC (now free)', icon: '🔓' },
+      { label: 'Swap Asset', detail: 'Trade $1M WBTC → $1M ETH on DEX', icon: '🔄' },
+      { label: 'Redeposit', detail: 'Deposit $1M ETH as new collateral', icon: '🏦' },
+      { label: 'Re-borrow', detail: 'Borrow $500K USDC against ETH', icon: '📋' },
+      { label: 'Repay Flash Loan', detail: 'Return $500K + fee to Aave', icon: '✅' },
+    ],
   },
   {
     id: 'self-liquidation',
@@ -103,6 +112,13 @@ export const useCases = [
       penalty: 'Protocol liquidation: 5–15% of collateral lost',
       savings: 'Self-liquidation: close at market rates, save thousands',
     },
+    flowSteps: [
+      { label: 'Flash Borrow', detail: 'Borrow DAI (the debt asset)', icon: '⚡' },
+      { label: 'Repay Own Loan', detail: 'Pay off your DAI debt on Aave', icon: '💰' },
+      { label: 'Withdraw Collateral', detail: 'Unlock and withdraw your ETH', icon: '🔓' },
+      { label: 'Sell Collateral', detail: 'Sell enough ETH to cover flash loan', icon: '📉' },
+      { label: 'Repay Flash Loan', detail: 'Return DAI + fee, keep remaining ETH', icon: '✅' },
+    ],
   },
   {
     id: 'refinancing',
@@ -118,6 +134,14 @@ export const useCases = [
       to: 'Compound: 4% APY on USDC',
       benefit: 'Instant migration, no capital required, 50% rate reduction',
     },
+    flowSteps: [
+      { label: 'Flash Borrow', detail: 'Borrow USDC from flash loan provider', icon: '⚡' },
+      { label: 'Repay Old Debt', detail: 'Pay off USDC debt on Aave (8% APY)', icon: '💰' },
+      { label: 'Withdraw Collateral', detail: 'Unlock ETH collateral from Aave', icon: '🔓' },
+      { label: 'Deposit Collateral', detail: 'Deposit ETH into Compound', icon: '🏦' },
+      { label: 'Borrow at Lower Rate', detail: 'Borrow USDC on Compound (4% APY)', icon: '📋' },
+      { label: 'Repay Flash Loan', detail: 'Return USDC + fee to provider', icon: '✅' },
+    ],
   },
 ];
 

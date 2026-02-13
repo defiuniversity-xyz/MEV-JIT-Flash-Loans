@@ -1,6 +1,7 @@
 import SectionWrapper from '../layout/SectionWrapper';
 import OracleManipulationSim from '../interactive/OracleManipulationSim';
 import AttackTimeline from '../interactive/AttackTimeline';
+import Tooltip from '../layout/Tooltip';
 import { AlertTriangle } from 'lucide-react';
 
 export default function FlashLoanAttacks() {
@@ -23,7 +24,8 @@ export default function FlashLoanAttacks() {
       {/* Oracle Manipulation */}
       <div className="mb-16">
         <h3 className="text-xl font-bold text-white mb-2">
-          Oracle Manipulation: The Primary Vector
+          <Tooltip term="Oracle" definition="A data feed that brings external information (like asset prices) on-chain. Flash loan attacks often target protocols using simple spot-price oracles instead of TWAP or Chainlink.">Oracle</Tooltip>{' '}
+          Manipulation: The Primary Vector
         </h3>
         <p className="text-sm text-defi-muted mb-6">
           The vast majority of flash loan exploits target price oracles. Step through

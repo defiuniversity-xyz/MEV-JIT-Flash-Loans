@@ -1,5 +1,6 @@
 import SectionWrapper from '../layout/SectionWrapper';
 import JITVisualizer from '../interactive/JITVisualizer';
+import Tooltip from '../layout/Tooltip';
 import { jitMetrics } from '../../data/mevJitContent';
 import { motion } from 'framer-motion';
 import { Crosshair } from 'lucide-react';
@@ -16,7 +17,9 @@ export default function JITDeepDive() {
         </h2>
         <p className="text-defi-muted max-w-2xl mx-auto">
           JIT is a high-frequency market-making operation compressed into a single block.
-          A searcher mints liquidity before a swap, captures the fees, and burns it after —
+          A{' '}
+          <Tooltip term="Searcher" definition="An algorithmic trader who scans the mempool for MEV opportunities like arbitrage, sandwich attacks, and JIT liquidity. They submit transaction 'bundles' to block builders.">searcher</Tooltip>{' '}
+          mints liquidity before a swap, captures the fees, and burns it after —
           all within ~12 seconds.
         </p>
       </div>

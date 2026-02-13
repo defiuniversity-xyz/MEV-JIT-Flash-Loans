@@ -114,16 +114,18 @@ export default function FlashLoanStepper() {
         <button
           onClick={() => setCurrentStep(Math.max(0, currentStep - 1))}
           disabled={currentStep === 0}
+          aria-label="Previous step"
           className="flex items-center gap-1 px-4 py-2 rounded-lg text-sm font-medium disabled:opacity-30 disabled:cursor-not-allowed text-defi-muted hover:text-white transition-colors"
         >
           <ChevronLeft className="w-4 h-4" /> Previous
         </button>
-        <span className="text-xs text-defi-muted">
-          {currentStep + 1} / {flashLoanLifecycle.length}
+        <span className="text-xs text-defi-muted" aria-live="polite">
+          Step {currentStep + 1} of {flashLoanLifecycle.length}
         </span>
         <button
           onClick={() => setCurrentStep(Math.min(flashLoanLifecycle.length - 1, currentStep + 1))}
           disabled={currentStep === flashLoanLifecycle.length - 1}
+          aria-label="Next step"
           className="flex items-center gap-1 px-4 py-2 rounded-lg text-sm font-medium disabled:opacity-30 disabled:cursor-not-allowed text-defi-muted hover:text-white transition-colors"
         >
           Next <ChevronRight className="w-4 h-4" />

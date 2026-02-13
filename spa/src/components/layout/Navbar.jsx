@@ -42,7 +42,7 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 glass">
+    <nav className="fixed top-0 left-0 right-0 z-50 glass" aria-label="Main navigation">
       {/* Progress bar */}
       <div className="absolute bottom-0 left-0 h-[2px] bg-defi-blue transition-all duration-150"
         style={{ width: `${scrollProgress * 100}%` }}
@@ -77,6 +77,8 @@ export default function Navbar() {
           <button
             className="lg:hidden text-defi-muted hover:text-white p-2"
             onClick={() => setMobileOpen(!mobileOpen)}
+            aria-label={mobileOpen ? 'Close navigation menu' : 'Open navigation menu'}
+            aria-expanded={mobileOpen}
           >
             {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
           </button>
